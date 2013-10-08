@@ -2,5 +2,5 @@ venv
 *.pyc
 *.xlsx
 *.json
-*.~
+*~
 *.org
