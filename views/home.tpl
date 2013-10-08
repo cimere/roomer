@@ -22,7 +22,6 @@
       <li><a href="/room/{{room}}">{{room}}</a></li>
       %end
       </ul>
-      <a id="logout" href="/logout">Esci</a>
     </div> <!-- /container -->
   </div>
   

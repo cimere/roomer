@@ -24,10 +24,10 @@ $(document).ready(function() {
 			
 			// TODO: repeating events
 	    	// Create a dummy even Object to check overlapping events
-	    	var event = new Object();
-			event.start = start;
-			event.end = end;
-			if (!isOverlapping(event)) {
+	    	var dummyEvent = new Object();
+			dummyEvent.start = start;
+			dummyEvent.end = end;
+			if (!isOverlapping(dummyEvent)) {
 	            $( "#dialog-insert" ).dialog({
 	            	resizable: false,
 	            	modal: true,
@@ -114,39 +114,47 @@ $(document).ready(function() {
                 	     }
             })
        	},
-       	eventResize: function(calEvent,dayDelta,minuteDelta,revertFunc) {
-	   		// TODO: check overlapping
-	   		$.post('/update_event',
-	    		{
-					id: calEvent.id,
-					room: room_name,
-					title: calEvent.title,
-					user: calEvent.user,
-					start: calEvent.start,
-					end: calEvent.end,
-					allDay: calEvent.allDay
-				}, 
-				function() {
-					console.log(calEvent.id+" event modified")
-				}
-			);
+       	eventResize: function(calEvent, dayDelta, minuteDelta, revertFunc) {
+       		// console.log('user is resizing event '+calEvent.id);
+       		// console.log('start: '+calEvent.start+'\nend: '+calEvent.end);
+	   		if (isOverlapping(calEvent)) {
+				revertFunc();
+			} else {
+				$.post('/update_event',
+		    		{
+						id: calEvent.id,
+						room: room_name,
+						title: calEvent.title,
+						user: calEvent.user,
+						start: calEvent.start,
+						end: calEvent.end,
+						allDay: calEvent.allDay
+					}, 
+					function() {
+						console.log(calEvent.id+" event modified")
+					}
+				);
+			}
        	},
-       	eventDrop: function(calEvent,dayDelta,minuteDelta,allDay,revertFunc) {
-       		// TODO: check overlapping
-       		$.post('/update_event',
-	    		{
-					id: calEvent.id,
-					room: room_name,
-					title: calEvent.title,
-					user: calEvent.user,
-					start: calEvent.start,
-					end: calEvent.end,
-					allDay: calEvent.allDay
-				}, 
-				function() {
-					console.log(calEvent.id+" event modified")
-				}
-			);
+       	eventDrop: function(calEvent, dayDelta, minuteDelta, allDay, revertFunc) {
+	   		if (isOverlapping(calEvent)) {
+				revertFunc();
+			} else {
+	       		$.post('/update_event',
+		    		{
+						id: calEvent.id,
+						room: room_name,
+						title: calEvent.title,
+						user: calEvent.user,
+						start: calEvent.start,
+						end: calEvent.end,
+						allDay: calEvent.allDay
+					}, 
+					function() {
+						console.log(calEvent.id+" event modified")
+					}
+				);
+	       	}
        	},
 		eventRender: function(event, element) {
            	element.find('.fc-event-title').append("<br/>" + event.user); 
@@ -173,8 +181,13 @@ $(document).ready(function() {
 	    // "calendar" on line below should ref the element on which fc has been called 
 	    var array = calendar.fullCalendar('clientEvents');
 	    for(i in array){
-	        if (event.end > array[i].start && event.start < array[i].end){
-	           return true;
+	    	if (event.id == array[i].id) {
+	    		// console.log('no op');
+	    	} else {
+		        if (event.end > array[i].start && event.start < array[i].end){
+		        	// console.log('Overlap = TRUE \nstart: '+array[i].start+'\nend: '+array[i].end)
+		           	return true;
+	        	}
 	        }
 	    }
 	    return false;
