@@ -41,9 +41,9 @@ def javascripts(filename):
 def stylesheets(filename):
     return bottle.static_file(filename, root='static/css')
 
-@bottle.get('/<filename:re:.*\.(jpg|png|gif|ico)>')
+@bottle.get('/images/<filename:re:.*\.(jpg|png|gif|ico)>')
 def images(filename):
-    return bottle.static_file(filename, root='static/img')
+    return bottle.static_file(filename, root='static/css/images')
 
 @bottle.get('/<filename:re:.*\.(eot|ttf|woff|svg)>')
 def fonts(filename):
