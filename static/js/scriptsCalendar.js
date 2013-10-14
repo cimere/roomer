@@ -7,6 +7,24 @@
 
 $(document).ready(function() {
 
+    $( "#until" ).datepicker({ dateFormat: "dd-mm-yy", minDate: 0, maxDate: "+6M" });
+
+
+    $("#radioDiv").click(function() {
+
+        var recursive = false;
+        var selected = $("#radioDiv input[type='radio']:checked");
+        if (selected.length > 0)
+            repeat = selected.val();
+        if (repeat == "never") {
+            $('#until').prop('disabled', true);
+            recursive = false;
+        } else {
+            $('#until').prop('disabled', false);
+            recursive = true;
+        }
+    });
+
     var room_name = $('span.room_name').text()
     var user = $('span.user').text();
 
@@ -47,7 +65,8 @@ $(document).ready(function() {
                     buttons: {
                                 "Inserisci": function() {
                                     var event_title = $('#title').val();
-                                    console.log(user+" is inserting a new event called "+event_title);
+                                    var until = $('#until').val();
+                                    // create event array
                                     var event = {
                                                 title: event_title,
                                                 user: user,
@@ -56,7 +75,9 @@ $(document).ready(function() {
                                                 allDay: allDay
                                     }
                                     event["id"] = createID(event);
-                                    if (event_title) {
+                                    console.log(user+" is inserting a new event called "+event_title+" recursive "+repeat+" until "+until);
+                                    if (event_title && until) {
+                                        // repeat render and post for each event in array
                                         calendar.fullCalendar('renderEvent',
                                             event,
                                             true // make the event "stick"
@@ -69,11 +90,11 @@ $(document).ready(function() {
                                                 title: event_title,
                                                 user: user,
                                                 start: Date.parse(start)/1000, // to UNIX format
-                                                end: Date.parse(start)/1000,
+                                                end: Date.parse(end)/1000,
                                                 allDay: allDay
                                             }, 
                                             function() {
-                                                console.log("event saved")
+                                                console.log(user + " created event id " + event["id"]);
                                             }
                                         );
                                     }
@@ -93,7 +114,6 @@ $(document).ready(function() {
                 buttons: {
                             "Modifica": function() {
                                 var new_event_title = $( "#new-title" ).val()
-                                console.log(new_event_title)
                                 if (new_event_title) {
                                     calEvent.title = new_event_title;
                                     calendar.fullCalendar('updateEvent',calEvent);
@@ -105,6 +125,7 @@ $(document).ready(function() {
                                 id = calEvent._id;
                                 calendar.fullCalendar('removeEvents', id)
                                 $("#dialog-update").dialog( "close" );
+                                // check userl
                                 $.post('/remove_event', {id: id, room: room_name},
                                     function() {
                                         console.log(id+" event deleted")
@@ -127,7 +148,7 @@ $(document).ready(function() {
             if (isOverlapping(calEvent)) {
                 revertFunc();
             } else {
-                postUpdateToServer(room_name, calEvent);
+                postUpdateToServer(room_name, calEvent, allDay);
             }
         },
         eventRender: function(event, element) {
@@ -183,8 +204,8 @@ $(document).ready(function() {
     }
 
     // POST update to server
-    function postUpdateToServer(room_name, calEvent) {
-        if (calEvent.allDay) {
+    function postUpdateToServer(room_name, calEvent, allDay) {
+        if (calEvent.allDay || allDay) {
             var tempEnd = calEvent.end;
         } else {
             var tempEnd = Date.parse(calEvent.end)/1000;
@@ -203,5 +224,24 @@ $(document).ready(function() {
                 console.log(calEvent.id+" event modified")
             }
         );
+    }
+
+    // Create event array
+    function createEventArray(event_title, user, start, end, allDay, repeat) {
+        
+        var events = [];
+
+
+        switch (repeat) {
+          case 'day':
+            //
+          case 'week':
+            //
+          case 'month':
+            //
+          default:
+            //
+        }
+
     }
 });
