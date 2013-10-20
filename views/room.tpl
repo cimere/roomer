@@ -24,7 +24,7 @@
           <form>
           <label><input type="radio" id="repeat-day" name="repeat" value="day"/>   Giorno</label><br />
           <label><input type="radio" id="repeat-week" name="repeat" value="week" />   Settimana</label><br />
-          <label><input type="radio" id="repeat-month" name="repeat" value="month" />   Mese</label><br />
+          <!-- <label><input type="radio" id="repeat-month" name="repeat" value="month" />   Mese</label><br /> -->
           <label><input type="radio" id="repeat-never" name="repeat" value="never" checked />   Mai</label><br />
           </form>
         </div>

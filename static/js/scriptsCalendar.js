@@ -3,45 +3,38 @@
 // 2. check overlapping on all day: DONE
 // 3. default su week: DONE
 // 4. recursive events
-// 5. only creator or admin can remove his events
+// 5. only creator or admin can remove his events. Not needed
 
 $(document).ready(function() {
 
-    $( "#until" ).datepicker({ dateFormat: "dd-mm-yy", minDate: 0, maxDate: "+6M" });
-
-
-    $("#radioDiv").click(function() {
-
-        var recursive = false;
-        var selected = $("#radioDiv input[type='radio']:checked");
-        if (selected.length > 0)
-            repeat = selected.val();
-        if (repeat == "never") {
-            $('#until').prop('disabled', true);
-            recursive = false;
-        } else {
-            $('#until').prop('disabled', false);
-            recursive = true;
-        }
+    $( "#until" ).datepicker({ 
+	dateFormat: "yy-mm-dd",
+	firstDay: 1,
+	dayNamesMin: [ "Do", "Lu", "Ma", "Me", "Gi", "Ve", "Sa" ],
+	minDate: 0, 
+	maxDate: "+6M" 
     });
+
+    $( "#radioDiv" ).click( repeatLogic );
 
     var room_name = $('span.room_name').text()
     var user = $('span.user').text();
 
-    // var date = new Date();
-    // var d = date.getDate();
-    // var m = date.getMonth();
-    // var y = date.getFullYear();
-    // console.log(Date(y, m, d, 10, 30))
-    // console.log(Date.parse(Date(y, m, d, 10, 30)))
-
     var calendar = $('#calendar').fullCalendar({
-
+	
         // options
-
+	aspectRatio: 1.6,
         defaultView: 'agendaWeek',
+	allDaySlot: false,
         weekends: false, // will hide Saturdays and Sundays
-        header: {
+	firstHour: 8,
+	firstDay: 1,
+	columnFormat: {
+	    month: 'ddd',    // Mon
+	    week: 'ddd d', // Mon 31
+	    day: 'dddd d'  // Monday 31
+	},
+	header: {
             left: 'prev,next today',
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
@@ -50,9 +43,12 @@ $(document).ready(function() {
         selectHelper: true,
 
         // callbacks
-
         select: function(start, end, allDay) {
             
+	    if (allDay) {
+		calendar.fullCalendar( 'changeView', 'agendaWeek' );
+		return;
+	    }
             // TODO: repeating events
             // Create a dummy even Object to check overlapping events
             var dummyEvent = new Object();
@@ -63,76 +59,47 @@ $(document).ready(function() {
                     resizable: false,
                     modal: true,
                     buttons: {
-                                "Inserisci": function() {
-                                    var event_title = $('#title').val();
-                                    var until = $('#until').val();
-                                    // create event array
-                                    var event = {
-                                                title: event_title,
-                                                user: user,
-                                                start: start,
-                                                end: end,
-                                                allDay: allDay
-                                    }
-                                    event["id"] = createID(event);
-                                    console.log(user+" is inserting a new event called "+event_title+" recursive "+repeat+" until "+until);
-                                    if (event_title && until) {
-                                        // repeat render and post for each event in array
-                                        calendar.fullCalendar('renderEvent',
-                                            event,
-                                            true // make the event "stick"
-                                        );
-                                        // Insert in mongoDB
-                                        $.post('/insert_event', 
-                                            {
-                                                id: event.id,
-                                                room: room_name,
-                                                title: event_title,
-                                                user: user,
-                                                start: Date.parse(start)/1000, // to UNIX format
-                                                end: Date.parse(end)/1000,
-                                                allDay: allDay
-                                            }, 
-                                            function() {
-                                                console.log(user + " created event id " + event["id"]);
-                                            }
-                                        );
-                                    }
-                                    $("#dialog-insert").dialog( "close" );
-                                }
-                             }
-                })
+                        "Inserisci": function() {
+                            var event_title = $('#title').val();
+                            if (event_title) {
+                                // Insert in mongoDB
+				insertEvent(room_name, event_title, user, start, end, allDay );
+				$( "#dialog-insert" ).dialog( "close" );
+                            };
+                        }
+                    }
+                });
             } else {
-                calendar.fullCalendar('unselect');
+		calendar.fullCalendar('unselect');
             }
-        },
-        eventClick: function(calEvent, jsEvent, view) {
-
-            $( "#dialog-update" ).dialog({
-                resizable: false,
+	},
+	eventClick: function(calEvent, jsEvent, view) {
+	    
+	    $( "#dialog-update" ).dialog({
+		resizable: false,
                 modal: true,
                 buttons: {
-                            "Modifica": function() {
-                                var new_event_title = $( "#new-title" ).val()
-                                if (new_event_title) {
-                                    calEvent.title = new_event_title;
-                                    calendar.fullCalendar('updateEvent',calEvent);
-                                    postUpdateToServer(room_name, calEvent);
-                                }
-                                $("#dialog-update").dialog( "close" );
-                            },
-                            "Rimuovi": function() {
-                                id = calEvent._id;
-                                calendar.fullCalendar('removeEvents', id)
-                                $("#dialog-update").dialog( "close" );
-                                // check userl
-                                $.post('/remove_event', {id: id, room: room_name},
-                                    function() {
-                                        console.log(id+" event deleted")
-                                    }
-                                );
-                            }
-                         }
+                    "Modifica": function() {
+                        var new_event_title = $( "#new-title" ).val()
+                        if (new_event_title) {
+                            calEvent.title = new_event_title;
+                            calendar.fullCalendar('updateEvent',calEvent);
+                            postUpdateToServer(room_name, calEvent);
+                        }
+                        $("#dialog-update").dialog( "close" );
+                    },
+                    "Rimuovi": function() {
+                        id = calEvent._id;
+                        calendar.fullCalendar('removeEvents', id)
+                        $("#dialog-update").dialog( "close" );
+                        // check userl
+                        $.post('/remove_event', {id: id, room: room_name},
+                               function() {
+                                   console.log(id+" event deleted")
+                               }
+                              );
+                    }
+                }
             })
         },
         eventResize: function(calEvent, dayDelta, minuteDelta, revertFunc) {
@@ -152,14 +119,18 @@ $(document).ready(function() {
             }
         },
         eventRender: function(event, element) {
-            element.find('.fc-event-title').append("<br/>" + event.user); 
+	    if (event.until == 0) {
+		element.find('.fc-event-title').append(" - " + event.user); 
+	    } else {
+		element.find('.fc-event-title').append("- " + event.user + "<br />fino al " + event.until.slice(0,10));
+	    }
         },
         editable: true,
         eventSources: [
             {
                 url: '/get_events/'+room_name,
                 error: function() {
-                    alert('there was an error while fetching events!');
+                    alert('There was an error while fetching events!');
                 }
             }
         ]
@@ -192,56 +163,93 @@ $(document).ready(function() {
         return false;
     }
 
+    // parse a date in dd-mm-yyyy format
+    // http://stackoverflow.com/questions/2587345/javascript-date-parse
+    function parseDate(input) {
+
+	var parts = input.split('-');
+	// new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+	return new Date(parts[2], parts[1] - 1, parts[0], 23, 59, 59, 999); // Months are 0-based
+    }
+    
+    // Repeat-event UI logic
+    function repeatLogic() {
+
+        var recursive = false;
+        var selected = $("#radioDiv input[type='radio']:checked");
+        if (selected.length > 0)
+            repeat = selected.val();
+        if (repeat == "never") {
+            $('#until').prop('disabled', true);
+	    $('#until').val("");
+            recursive = false;
+        } else {
+            $('#until').prop('disabled', false);
+            recursive = true;
+        }
+    }
+    
     // Create unique ID
-    function createID(event) {
+    function createID(user) {
         var date = new Date();
+
         var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         var salt = "";
         for (var i=0; i<=5; i++) {
             salt = salt + alphabet[Math.floor(Math.random() * alphabet.length)];
         };
-        return event.user + date.getTime() + salt;
+        return user + date.getTime() + salt;
     }
 
     // POST update to server
     function postUpdateToServer(room_name, calEvent, allDay) {
-        if (calEvent.allDay || allDay) {
-            var tempEnd = calEvent.end;
-        } else {
-            var tempEnd = Date.parse(calEvent.end)/1000;
-        };
+        // if (calEvent.allDay || allDay) {
+        //     var tempEnd = calEvent.end;
+        // } else {
+        //     var tempEnd = Date.parse(calEvent.end)/1000;
+        // };
         $.post('/update_event',
-            {
-                id: calEvent.id,
-                room: room_name,
-                title: calEvent.title,
-                user: calEvent.user,
-                start: Date.parse(calEvent.start)/1000,
-                end: tempEnd,
-                allDay: calEvent.allDay
-            }, 
-            function() {
-                console.log(calEvent.id+" event modified")
-            }
-        );
+               {
+                   id: calEvent.id,
+                   room: room_name,
+                   title: calEvent.title,
+                   user: calEvent.user,
+                   start: calEvent.start,
+                   end: calEvent.end,
+                   allDay: calEvent.allDay,
+		   repeat: calEvent.repeat,
+		   until: calEvent.until
+               }, 
+               function() {
+		   console.log(user + " modified event id " + calEvent.id);
+                   calendar.fullCalendar( 'refetchEvents' );
+               }
+	      );
     }
 
-    // Create event array
-    function createEventArray(event_title, user, start, end, allDay, repeat) {
-        
-        var events = [];
+    // Post insert to server
+    function insertEvent(room, title, user, start, end, allDay) {
 
-
-        switch (repeat) {
-          case 'day':
-            //
-          case 'week':
-            //
-          case 'month':
-            //
-          default:
-            //
-        }
-
+	var event_id = createID(user)
+	var until = $('#until').val();
+	repeatLogic();        
+	console.log(user+" is inserting a new event called "+title+" recursive "+repeat+" until "+until);	
+	$.post('/insert_event', 
+               {
+                   id: event_id,
+                   room: room,
+                   title: title,
+                   user: user,
+                   start: start,
+                   end: end,
+                   allDay: allDay,
+		   repeat: repeat,
+		   until: until
+               }, 
+               function() {
+		   console.log(user + " created event id " + event_id);
+                   calendar.fullCalendar( 'refetchEvents' );
+               }
+              );
     }
 });

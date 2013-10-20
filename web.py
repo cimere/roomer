@@ -15,6 +15,8 @@
 #
 #
 
+import datetime
+import time
 import bottle
 import pymongo
 import cgi
@@ -72,7 +74,7 @@ def present_login():
 
     if username is None:
         return bottle.template("login",
-                                dict(username="", login_error=""))
+                               dict(username="", login_error=""))
     else:
         bottle.redirect("/")
 
@@ -125,6 +127,7 @@ def get_room(name):
         return bottle.template('room', dict(user=username,
                                             room=room,
                                             rooms=room_names['names']))
+
 @bottle.get('/user/<id>')
 def get_user(id):
 
@@ -138,35 +141,73 @@ def get_user_ids():
 
 @bottle.get('/get_events/<name>')
 def get_events(name):
+
     return rooms.read_event(name)
 
 @bottle.post('/insert_event')
 def insert_event():
 
+    events = []
+
+    id = bottle.request.forms.get("id")
+    title = bottle.request.forms.get("title")
+    user = bottle.request.forms.get("user")
     room = bottle.request.forms.get("room")
-    event = dict(id = bottle.request.forms.get("id"),
-                 title = bottle.request.forms.get("title"),                                                     
-                 user = bottle.request.forms.get("user"),
-                 start = bottle.request.forms.get("start"),
-                 end = bottle.request.forms.get("end"),
-                 allDay = eval(string.capitalize(bottle.request.forms.get("allDay"))))
-    
-    rooms.insert_event(room, event)
+    repeat = bottle.request.forms.get("repeat")
+    until = bottle.request.forms.get("until")
+    start = ISO_str_to_date(bottle.request.forms.get("start"))
+    end =  ISO_str_to_date(bottle.request.forms.get("end"))
+    allDay = eval(string.capitalize(bottle.request.forms.get("allDay")))
+
+    # Compute data to manage recursive events
+    options = {"never": 0, # never repeat
+               "day": 1, 
+               "week": 7
+    }
+    delta = options[repeat]
+    if delta == 0:
+        # non recurring event
+        n_events = 1
+        until = 0
+    else:
+        # recurring event, check for overlapping
+        until =  str_to_date(until)
+        if is_overlapping():
+            return False
+        else:
+            # not overlapping
+            n_events = (until - start).days / delta + 1 # count the first event too.
+        
+    # Generate event(s)
+    for count in range(n_events):
+        event = dict(
+            id = id,
+            title = title,
+            user = user,
+            start = start,
+            end = end,
+            allDay = allDay,
+            repeat = repeat,
+            until = until
+        )
+        start += datetime.timedelta(delta)
+        if allDay:
+            pass
+        else:
+            end += datetime.timedelta(delta)
+        events.append(event)
+        
+    rooms.insert_event(room, events)
+
 
 @bottle.post('/update_event')
-def insert_event():
+def update_event():
+    if is_overlapping():
+        return False
+    remove_event()
+    insert_event()
 
-    # TODO: migliorare, e' uguale all'insert!!!
-
-    room = bottle.request.forms.get("room")
-    event = dict(id = bottle.request.forms.get("id"),
-                 title = bottle.request.forms.get("title"),                                                     
-                 user = bottle.request.forms.get("user"),
-                 start = bottle.request.forms.get("start"),
-                 end = bottle.request.forms.get("end"),
-                 allDay = eval(string.capitalize(bottle.request.forms.get("allDay"))))
     
-    rooms.update_event(room, event)
 
 @bottle.post('/remove_event')
 def remove_event():
@@ -183,6 +224,39 @@ def get_session_username():
     cookie = bottle.request.get_cookie("session")
     return sessions.get_username(cookie)
 
+def ISO_str_to_date(string):
+
+    struct = time.strptime(string, "%a %b %d %Y %H:%M:%S GMT+0200 (CEST)")
+    unix = time.mktime(struct)
+    date = datetime.datetime.fromtimestamp(unix)
+    return date
+
+def str_to_date(string):
+
+    struct = time.strptime(string[:10], "%Y-%m-%d")
+    unix = time.mktime(struct)
+    date = datetime.datetime.fromtimestamp(unix)
+    return date
+
+
+def is_overlapping():
+
+    id = bottle.request.forms.get("id")
+    repeat = bottle.request.forms.get("repeat")
+    start = ISO_str_to_date(bottle.request.forms.get("start"))
+    end =  ISO_str_to_date(bottle.request.forms.get("end"))
+    if repeat != "never":
+        # recurring event, check for overlapping
+        until =  str_to_date(bottle.request.forms.get("until"))
+        overlapping = rooms.check_overlapping(id, start.hour, start.minute,
+                                              end.hour, end.minute,
+                                              until)
+        print overlapping
+        if overlapping == []:
+            # not overlapping
+            return False
+        else:
+            return True
 
 
 connection_string = "mongodb://localhost"
