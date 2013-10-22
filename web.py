@@ -62,9 +62,10 @@ def home():
         print "welcome: can't identify user...redirecting to signup"
         bottle.redirect("/login")
     else:
-        room_names = rooms.get_room_names()
+        rooms_data = rooms.get_rooms()
+        print rooms_data
         return bottle.template('home', dict(username=username,
-                                            rooms=room_names['names']))
+                                            rooms=rooms_data))
 
 # displays the initial blog login form
 @bottle.get('/login')
@@ -123,10 +124,10 @@ def get_room(name):
         bottle.redirect("/login")
     else:
         room = rooms.get_room(name)
-        room_names = rooms.get_room_names()
+        room_names = rooms.get_rooms()
         return bottle.template('room', dict(user=username,
                                             room=room,
-                                            rooms=room_names['names']))
+                                            rooms=room_names))
 
 @bottle.get('/user/<id>')
 def get_user(id):
@@ -206,7 +207,21 @@ def update_event():
         return False
     remove_event()
     insert_event()
-
+    # repeat = bottle.request.forms.get("repeat")
+    # if repeat == "never":
+    #     until = 0
+    # else:
+    #     until = str_to_date(bottle.request.forms.get("until"))
+    # room = bottle.request.forms.get("room")
+    # event = dict(id = bottle.request.forms.get("id"),
+    #              title = bottle.request.forms.get("title"),
+    #              user = bottle.request.forms.get("user"),
+    #              start = ISO_str_to_date(bottle.request.forms.get("start")),
+    #              end = ISO_str_to_date(bottle.request.forms.get("end")),
+    #              allDay = eval(string.capitalize(bottle.request.forms.get("allDay"))),
+    #              until = until,
+    #              repeat = repeat)
+    # rooms.update_event(room, event)
     
 
 @bottle.post('/remove_event')
@@ -232,8 +247,8 @@ def ISO_str_to_date(string):
     return date
 
 def str_to_date(string):
-
-    struct = time.strptime(string[:10], "%Y-%m-%d")
+    print string
+    struct = time.strptime(string, "%Y-%m-%dT%H:%M:%S")
     unix = time.mktime(struct)
     date = datetime.datetime.fromtimestamp(unix)
     return date
@@ -247,8 +262,9 @@ def is_overlapping():
     end =  ISO_str_to_date(bottle.request.forms.get("end"))
     if repeat != "never":
         # recurring event, check for overlapping
-        until =  str_to_date(bottle.request.forms.get("until"))
-        overlapping = rooms.check_overlapping(id, start.hour, start.minute,
+        until =  str_to_date(bottle.request.forms.get("until")) 
+        overlapping = rooms.check_overlapping(id, start,
+                                              start.hour, start.minute,
                                               end.hour, end.minute,
                                               until)
         print overlapping

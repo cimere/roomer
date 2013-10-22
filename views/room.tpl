@@ -10,7 +10,7 @@
 <!-- Wrap all page content here -->
   <div id="wrap">
 
-    % include header stanze=rooms
+    % include header stanze=[room['name'] for room in rooms]
 
     <!-- Begin page content -->
     <div class="container">

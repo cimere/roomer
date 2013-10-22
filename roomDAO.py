@@ -44,34 +44,33 @@ class RoomDAO:
     def update_event(self, room, event):
 
         query = { "name": room, "reservations.id": event["id"]}
-        event = { "$set": { "reservations.title" : event["title"],
-                            "reservations.start" : event["start"],
-                            "reservations.end" : event["end"],
-                            "reservations.allDay" : event["allDay"],
-                            "reservations.until": event["until"] } 
+        event = { "$set": { "reservations.$.title" : event["title"],
+                            "reservations.$.start" : event["start"],
+                            "reservations.$.end" : event["end"],
+                            "reservations.$.allDay" : event["allDay"],
+                            "reservations.$.until": event["until"] } 
                         }
         self.db.rooms.update( query, event)
 
     def remove_event(self, room, id):
-        print room, id
         self.db.rooms.update({"name": room}, {"$pull": {"reservations": {"id": id}}})
 
 
-    def get_room_names(self):
+    def get_rooms(self):
 
-        names = {'names': []}
+        rooms = []
 
         try:
-            cursor = self.rooms.find()
+            cursor = self.rooms.find(fields={'_id': False, 'reservations': False})
         except:
             print "Unable to query database for user"
-
-        for doc in cursor:
-            names['names'].append(doc['name'])
-
-        return names
         
-    def check_overlapping(self, id, start_hour, start_min, end_hour, end_min, until):
+        for doc in cursor:
+            rooms.append(doc)
+            
+        return rooms
+        
+    def check_overlapping(self, id, start, start_hour, start_min, end_hour, end_min, until):
         
         try:
             cursor = self.rooms.aggregate(
@@ -80,7 +79,11 @@ class RoomDAO:
                         "$unwind": "$reservations"
                     },
                     {
-                        "$match":{"reservations.end": {"$lte": until}}
+                        "$match":
+                        {
+                            "reservations.end": {"$lte": until},
+                            "reservations.start": {"$gte": start}
+                        }
                     },
                     {
                         "$project":

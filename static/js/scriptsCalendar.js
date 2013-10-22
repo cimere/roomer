@@ -1,3 +1,4 @@
+
 // TODO:
 // 1. use UNIX time: DONE
 // 2. check overlapping on all day: DONE
@@ -244,7 +245,7 @@ $(document).ready(function() {
                    end: end,
                    allDay: allDay,
 		   repeat: repeat,
-		   until: until
+		   until: until + "T23:59:59"
                }, 
                function() {
 		   console.log(user + " created event id " + event_id);
