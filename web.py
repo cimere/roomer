@@ -189,7 +189,8 @@ def insert_event():
             end = end,
             allDay = allDay,
             repeat = repeat,
-            until = until
+            until = until,
+            num = count
         )
         start += datetime.timedelta(delta)
         if allDay:
@@ -229,8 +230,19 @@ def remove_event():
 
     room = bottle.request.forms.get("room")
     id = bottle.request.forms.get("id")
-    rooms.remove_event(room, id)
-
+    repeat = bottle.request.forms.get("repeat")
+    start_event = bottle.request.forms.get("startEvent")
+    if repeat == "never":
+        rooms.remove_event(room, id)
+    else:
+        if start_event == "onlyThis":
+            num = int(bottle.request.forms.get("num"))
+            rooms.remove_event(room, id, num)
+        elif start_event == "fromHere":
+            num = int(bottle.request.forms.get("num"))
+            rooms.remove_event_from_here(room, id, num)
+        else: # fromStart
+            rooms.remove_event_from_here(room, id, 0)
 
 # Helper Functions  
 

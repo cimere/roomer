@@ -24,7 +24,6 @@
           <form>
           <label><input type="radio" id="repeat-day" name="repeat" value="day"/>   Giorno</label><br />
           <label><input type="radio" id="repeat-week" name="repeat" value="week" />   Settimana</label><br />
-          <!-- <label><input type="radio" id="repeat-month" name="repeat" value="month" />   Mese</label><br /> -->
           <label><input type="radio" id="repeat-never" name="repeat" value="never" checked />   Mai</label><br />
           </form>
         </div>
@@ -33,7 +32,14 @@
       </div>
       <div id="dialog-update" title="Modifica evento" style="display: none">
     	  <label for="new-event-title">Titolo</label>
-    	  <input type="text" id="new-title" />
+    	  <input type="text" id="new-title" /><br />
+          <div id="whichEventDiv" style="display: none">
+            <form>
+              <label><input type="radio" id="onlyThis" name="repeat" value="onlyThis" checked/>   Solo questo</label><br />
+              <label><input type="radio" id="fromHere" name="repeat" value="fromHere" />   Da qui</label><br />
+              <label><input type="radio" id="fromStart" name="repeat" value="fromStart" checked /> Dall'inizio</label><br />
+            </form>
+	  </div>
       </div>
     </div> <!-- /container -->
   </div>

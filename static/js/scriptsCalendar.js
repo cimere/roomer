@@ -1,4 +1,5 @@
 
+
 // TODO:
 // 1. use UNIX time: DONE
 // 2. check overlapping on all day: DONE
@@ -75,7 +76,11 @@ $(document).ready(function() {
             }
 	},
 	eventClick: function(calEvent, jsEvent, view) {
-	    
+	    if (calEvent.repeat != "never") {
+		$("#whichEventDiv").show();
+	    } else {
+		$("#whichEventDiv").hide();
+	    }
 	    $( "#dialog-update" ).dialog({
 		resizable: false,
                 modal: true,
@@ -84,19 +89,22 @@ $(document).ready(function() {
                         var new_event_title = $( "#new-title" ).val()
                         if (new_event_title) {
                             calEvent.title = new_event_title;
-                            calendar.fullCalendar('updateEvent',calEvent);
                             postUpdateToServer(room_name, calEvent);
                         }
                         $("#dialog-update").dialog( "close" );
                     },
                     "Rimuovi": function() {
                         id = calEvent._id;
-                        calendar.fullCalendar('removeEvents', id)
                         $("#dialog-update").dialog( "close" );
-                        // check userl
-                        $.post('/remove_event', {id: id, room: room_name},
+                        var startEvent = $("#whichEventDiv input[type='radio']:checked").val();
+                        $.post('/remove_event', {id: id, 
+						 room: room_name, 
+						 repeat: calEvent.repeat,
+						 startEvent: startEvent, 
+						 num: calEvent.num},
                                function() {
-                                   console.log(id+" event deleted")
+				   calendar.fullCalendar( 'refetchEvents' );
+                                   console.log(id+" event deleted");
                                }
                               );
                     }
@@ -203,12 +211,13 @@ $(document).ready(function() {
     }
 
     // POST update to server
-    function postUpdateToServer(room_name, calEvent, allDay) {
+    function postUpdateToServer(room_name, calEvent, which) {
         // if (calEvent.allDay || allDay) {
         //     var tempEnd = calEvent.end;
         // } else {
         //     var tempEnd = Date.parse(calEvent.end)/1000;
         // };
+	var startEvent = $("#whichEventDiv input[type='radio']:checked").val();
         $.post('/update_event',
                {
                    id: calEvent.id,
@@ -219,7 +228,9 @@ $(document).ready(function() {
                    end: calEvent.end,
                    allDay: calEvent.allDay,
 		   repeat: calEvent.repeat,
-		   until: calEvent.until
+		   until: calEvent.until,
+		   num: calEvent.num,
+		   which: startEvent
                }, 
                function() {
 		   console.log(user + " modified event id " + calEvent.id);

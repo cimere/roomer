@@ -53,7 +53,12 @@ class RoomDAO:
         self.db.rooms.update( query, event)
 
     def remove_event(self, room, id):
+
         self.db.rooms.update({"name": room}, {"$pull": {"reservations": {"id": id}}})
+
+    def remove_event_from_here(self, room, id, num):
+        
+        self.db.rooms.update({"name": room}, {"$pull": {"reservations": {"id": id, "num": {"$gte": num}}}})
 
 
     def get_rooms(self):
