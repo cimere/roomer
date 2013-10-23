@@ -259,7 +259,7 @@ def str_to_date(string):
 
     struct = time.strptime(string, "%Y-%m-%dT%H:%M:%S")
     unix = time.mktime(struct)
-    date = datetime.datetime.fromtimestamp(string)
+    date = datetime.datetime.fromtimestamp(unix)
     return date
 
 
