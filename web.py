@@ -250,16 +250,16 @@ def get_session_username():
 
 def ISO_str_to_date(string):
 
-    struct = time.strptime(string, "%a %b %d %Y %H:%M:%S GMT+0200 (CEST)")
-    unix = time.mktime(struct)
-    date = datetime.datetime.fromtimestamp(unix)
+#    struct = time.strptime(string, "%a %b %d %Y %H:%M:%S GMT+0200 (CEST)")
+#    unix = time.mktime(struct)
+    date = datetime.datetime.fromtimestamp(int(string))
     return date
 
 def str_to_date(string):
-    print string
+
     struct = time.strptime(string, "%Y-%m-%dT%H:%M:%S")
     unix = time.mktime(struct)
-    date = datetime.datetime.fromtimestamp(unix)
+    date = datetime.datetime.fromtimestamp(string)
     return date
 
 
