@@ -266,13 +266,14 @@ def str_to_date(string):
 def is_overlapping():
 
     id = bottle.request.forms.get("id")
+    room = bottle.request.forms.get("room")
     repeat = bottle.request.forms.get("repeat")
     start = ISO_str_to_date(bottle.request.forms.get("start"))
     end =  ISO_str_to_date(bottle.request.forms.get("end"))
     if repeat != "never":
         # recurring event, check for overlapping
         until =  str_to_date(bottle.request.forms.get("until")) 
-        overlapping = rooms.check_overlapping(id, start,
+        overlapping = rooms.check_overlapping(room, id, start,
                                               start.hour, start.minute,
                                               end.hour, end.minute,
                                               until)

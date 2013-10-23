@@ -79,18 +79,24 @@ class RoomDAO:
             
         return rooms
         
-    def check_overlapping(self, id, start, start_hour, start_min, end_hour, end_min, until):
+    def check_overlapping(self, room, id, start, start_hour, start_min, end_hour, end_min, until):
         
         try:
             cursor = self.rooms.aggregate(
                 [
+                    {
+                        "$match": 
+                        {
+                            "name": room
+                        }
+                    },
                     {
                         "$unwind": "$reservations"
                     },
                     {
                         "$match":
                         {
-                            "reservations.end": {"$lte": until},
+                            "Reservations.end": {"$lte": until},
                             "reservations.start": {"$gte": start}
                         }
                     },
@@ -131,3 +137,5 @@ class RoomDAO:
             print "Unable to query database for user"    
         
         return cursor['result']
+
+                

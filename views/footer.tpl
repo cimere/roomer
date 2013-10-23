@@ -2,7 +2,7 @@
   <div class="container">
   	<div class="row">
 	  <div class="col-xs-12 col-md-8">
-	  	<p class="text-muted credit">Written and mantained by <a href="mailto:ciro.meregalli@gmail.com?Subject=Reserve.me" target="_top">cmeregalli</a> &copy 2013</p>
+	  	<p class="text-muted credit">Written by <a href="mailto:ciro.meregalli@fastweb.it?Subject=Reserve.me" target="_top">cmeregalli</a> &copy 2013</p>
 	  </div>
 	  <div class="col-xs-6 col-md-4 footer-logo">
 	  	<!-- <img src="../poweredbyMongoDB.png" class="img-responsive" alt="MongoDB Logo"></img>-->
