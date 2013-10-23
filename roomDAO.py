@@ -31,6 +31,8 @@ class RoomDAO:
         projection = {"reservations": 1, "_id": 0}
 
         events = self.db.rooms.find_one(query, projection)
+        if events is None:
+            return json.dumps([]) 
         for event in events['reservations']:
             event['start'] = event['start'].isoformat()
             event['end'] = event['end'].isoformat()
@@ -52,9 +54,11 @@ class RoomDAO:
                         }
         self.db.rooms.update( query, event)
 
-    def remove_event(self, room, id):
-
-        self.db.rooms.update({"name": room}, {"$pull": {"reservations": {"id": id}}})
+    def remove_event(self, room, id, num):
+        
+        if num is None:
+            num = "null"
+        self.db.rooms.update({"name": room}, {"$pull": {"reservations": {"id": id, "num": num}}})
 
     def remove_event_from_here(self, room, id, num):
         

@@ -113,7 +113,9 @@ def process_logout():
     cookie = bottle.request.get_cookie("session")
     sessions.end_session(cookie)
     bottle.response.set_cookie("session", "")
-    bottle.redirect("/login")
+    bottle.redirect("login")
+    # enable in prod:
+    #bottle.redirect("/roomer")
 
 @bottle.get('/room/<name>')
 def get_room(name):
@@ -123,11 +125,11 @@ def get_room(name):
     if username is None:
         bottle.redirect("/login")
     else:
-        room = rooms.get_room(name)
-        room_names = rooms.get_rooms()
+        room_data = rooms.get_room(name)
+        rooms_names = rooms.get_rooms()
         return bottle.template('room', dict(user=username,
-                                            room=room,
-                                            rooms=room_names))
+                                            room_data=room_data,
+                                            rooms_names=rooms_names))
 
 @bottle.get('/user/<id>')
 def get_user(id):
@@ -159,7 +161,9 @@ def insert_event():
     start = ISO_str_to_date(bottle.request.forms.get("start"))
     end =  ISO_str_to_date(bottle.request.forms.get("end"))
     allDay = eval(string.capitalize(bottle.request.forms.get("allDay")))
-
+    repeat = bottle.request.forms.get("repeat")
+    start_event = bottle.request.forms.get("startEvent")
+    num = int(bottle.request.forms.get("num")) # if insert POST, num = 0 
     # Compute data to manage recursive events
     options = {"never": 0, # never repeat
                "day": 1, 
@@ -177,7 +181,15 @@ def insert_event():
             return False
         else:
             # not overlapping
-            n_events = (until - start).days / delta + 1 # count the first event too.
+            if start_event == 'fromHere':
+                n_events = (until - start).days / delta + 1 # count the first event too.
+            elif start_event == 'onlyThis':
+                n_events = 1
+            else: #fromStart
+                n_events = (until - start).days / delta + 1 + num # count the first event too.
+                start = start - datetime.timedelta(days=num)
+                end = end - datetime.timedelta(days=num)
+
         
     # Generate event(s)
     for count in range(n_events):
@@ -208,22 +220,7 @@ def update_event():
         return False
     remove_event()
     insert_event()
-    # repeat = bottle.request.forms.get("repeat")
-    # if repeat == "never":
-    #     until = 0
-    # else:
-    #     until = str_to_date(bottle.request.forms.get("until"))
-    # room = bottle.request.forms.get("room")
-    # event = dict(id = bottle.request.forms.get("id"),
-    #              title = bottle.request.forms.get("title"),
-    #              user = bottle.request.forms.get("user"),
-    #              start = ISO_str_to_date(bottle.request.forms.get("start")),
-    #              end = ISO_str_to_date(bottle.request.forms.get("end")),
-    #              allDay = eval(string.capitalize(bottle.request.forms.get("allDay"))),
-    #              until = until,
-    #              repeat = repeat)
-    # rooms.update_event(room, event)
-    
+    repeat = bottle.request.forms.get("repeat")
 
 @bottle.post('/remove_event')
 def remove_event():
@@ -233,7 +230,7 @@ def remove_event():
     repeat = bottle.request.forms.get("repeat")
     start_event = bottle.request.forms.get("startEvent")
     if repeat == "never":
-        rooms.remove_event(room, id)
+        rooms.remove_event(room, id, 0)
     else:
         if start_event == "onlyThis":
             num = int(bottle.request.forms.get("num"))

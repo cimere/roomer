@@ -19,7 +19,7 @@
       </div>
       <ul>
       %for room in rooms:
-      <li><a href="/room/{{room['name']}}">{{room['name']}}</a></li>
+      <li><a href="/room/{{room['name']}}">{{room['name']}}</a> - {{room['desc']}} Interno: {{room['tel']}}</li>
       %end
       <li>Corner AGILITY, postazione per 3 persone con tavolino e punti rete (non prenotabile).</li>
       </ul>

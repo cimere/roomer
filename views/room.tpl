@@ -10,11 +10,11 @@
 <!-- Wrap all page content here -->
   <div id="wrap">
 
-    % include header stanze=[room['name'] for room in rooms]
+    % include header stanze=[room['name'] for room in rooms_names]
 
     <!-- Begin page content -->
     <div class="container">
-      <h2>Ciao <span class="user">{{user}}</span>, prenota <span class="room_name">{{room['name']}}</span></h2>
+      <h2>Ciao <span class="user">{{user}}</span>, prenota <span class="room_name">{{room_data['name']}}</span></h2>{{room_data['desc']}} Interno:{{room_data['tel']}}<br />
       <div id='calendar'></div>
       <div id="dialog-insert" title="Inserisci evento" style="display: none" >
     	  <label for="event-title">Titolo </label>
@@ -36,8 +36,8 @@
           <div id="whichEventDiv" style="display: none">
             <form>
               <label><input type="radio" id="onlyThis" name="repeat" value="onlyThis" checked/>   Solo questo</label><br />
-              <label><input type="radio" id="fromHere" name="repeat" value="fromHere" />   Da qui</label><br />
-              <label><input type="radio" id="fromStart" name="repeat" value="fromStart" checked /> Dall'inizio</label><br />
+              <!-- <label><input type="radio" id="fromHere" name="repeat" value="fromHere" />   Da qui</label><br />  -->
+              <label><input type="radio" id="fromStart" name="repeat" value="fromStart" checked /> Tutto</label><br />
             </form>
 	  </div>
       </div>

@@ -1,5 +1,6 @@
 
 
+
 // TODO:
 // 1. use UNIX time: DONE
 // 2. check overlapping on all day: DONE
@@ -114,14 +115,14 @@ $(document).ready(function() {
         eventResize: function(calEvent, dayDelta, minuteDelta, revertFunc) {
             // console.log('user is resizing event '+calEvent.id);
             // console.log('start: '+calEvent.start+'\nend: '+calEvent.end);
-            if (isOverlapping(calEvent)) {
+            if ((isOverlapping(calEvent)) || (calEvent.repeat != "never")) {
                 revertFunc();
             } else {
                 postUpdateToServer(room_name, calEvent);
             }
         },
         eventDrop: function(calEvent, dayDelta, minuteDelta, allDay, revertFunc) {
-            if (isOverlapping(calEvent)) {
+            if ((isOverlapping(calEvent)) || (calEvent.repeat != "never")) {
                 revertFunc();
             } else {
                 postUpdateToServer(room_name, calEvent, allDay);
@@ -230,7 +231,7 @@ $(document).ready(function() {
 		   repeat: calEvent.repeat,
 		   until: calEvent.until,
 		   num: calEvent.num,
-		   which: startEvent
+		   startEvent: startEvent
                }, 
                function() {
 		   console.log(user + " modified event id " + calEvent.id);
@@ -256,7 +257,8 @@ $(document).ready(function() {
                    end: end,
                    allDay: allDay,
 		   repeat: repeat,
-		   until: until + "T23:59:59"
+		   until: until + "T23:59:59",
+		   num: 0
                }, 
                function() {
 		   console.log(user + " created event id " + event_id);
