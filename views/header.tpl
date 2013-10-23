@@ -16,9 +16,9 @@
         <li><a href="/room/{{room}}">{{room}}</a></li>
         %end
       </ul>
-      <div class="navbar-form navbar-right">
+<!--      <div class="navbar-form navbar-right">
         <a href="/logout" class="btn btn-primary">Logout</a>
-      </div>
+      </div>-->
     </div><!--/.nav-collapse -->
   </div>
 </div>
