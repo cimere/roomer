@@ -145,7 +145,7 @@ def get_user_ids():
 @bottle.get('/get_events/<name>')
 def get_events(name):
 
-    return rooms.read_event(name)
+    return rooms.get_event(name)
 
 @bottle.post('/insert_event')
 def insert_event():

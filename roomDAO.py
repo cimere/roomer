@@ -13,7 +13,7 @@ class RoomDAO:
         # self.SECRET = 'verysecret'
 
     def get_room(self, name):
-
+        ''' Get room data, return one room document. '''
         try:
             room = self.rooms.find_one({"name": name})
         except:
@@ -21,11 +21,21 @@ class RoomDAO:
 
         return room
 
-    def insert_event(self, room, events):
+    def get_rooms(self):
+        ''' Get data for all rooms. '''
+        rooms = []
 
-        self.db.rooms.update({"name": room}, {"$push": {"reservations": {"$each": events}}})
+        try:
+            cursor = self.rooms.find(fields={'_id': False, 'reservations': False}).sort("name", pymongo.ASCENDING)
+        except:
+            print "Unable to query database for user"
+        
+        for doc in cursor:
+            rooms.append(doc)
+            
+        return rooms
 
-    def read_event(self, room):
+    def get_event(self, room):
         
         query = {"name": room}
         projection = {"reservations": 1, "_id": 0}
@@ -36,11 +46,15 @@ class RoomDAO:
         for event in events['reservations']:
             event['start'] = event['start'].isoformat()
             event['end'] = event['end'].isoformat()
-            if type(event['until']) == int:
+            if type(event['until']) == int: # TODO: set until = start date in web.py or js in order to avoid this control.
                 pass
             else:
                 event['until'] = event['until'].isoformat()
-        return json.dumps(events["reservations"], default=json_util.default)
+        return json.dumps(events["reservations"], default=json_util.default) # TODO: move json dumps in web.py? If it returns an array do I still need to perform json parse?
+
+    def insert_event(self, room, events):
+
+        self.db.rooms.update({"name": room}, {"$push": {"reservations": {"$each": events}}})
         #return events["reservations"]
 
     def update_event(self, room, event):
@@ -60,24 +74,9 @@ class RoomDAO:
             num = "null"
         self.db.rooms.update({"name": room}, {"$pull": {"reservations": {"id": id, "num": num}}})
 
-    def remove_event_from_here(self, room, id, num):
+    def remove_event_from_here(self, room, id, here):
         
-        self.db.rooms.update({"name": room}, {"$pull": {"reservations": {"id": id, "num": {"$gte": num}}}})
-
-
-    def get_rooms(self):
-
-        rooms = []
-
-        try:
-            cursor = self.rooms.find(fields={'_id': False, 'reservations': False})
-        except:
-            print "Unable to query database for user"
-        
-        for doc in cursor:
-            rooms.append(doc)
-            
-        return rooms
+        self.db.rooms.update({"name": room}, {"$pull": {"reservations": {"id": id, "num": {"$gte": here}}}})
         
     def check_overlapping(self, room, id, start, start_hour, start_min, end_hour, end_min, until):
         
