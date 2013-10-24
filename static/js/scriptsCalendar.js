@@ -77,52 +77,56 @@ $(document).ready(function() {
             }
 	},
 	eventClick: function(calEvent, jsEvent, view) {
-	    if (calEvent.repeat != "never") {
-		$("#whichEventDiv").show();
-	    } else {
-		$("#whichEventDiv").hide();
-	    }
-	    $( "#dialog-update" ).dialog({
-		resizable: false,
-                modal: true,
-                buttons: {
-                    "Modifica": function() {
-                        var new_event_title = $( "#new-title" ).val()
-                        if (new_event_title) {
-                            calEvent.title = new_event_title;
-                            postUpdateToServer(room_name, calEvent);
-                        }
-                        $("#dialog-update").dialog( "close" );
-                    },
-                    "Rimuovi": function() {
-                        id = calEvent._id;
-                        $("#dialog-update").dialog( "close" );
-                        var startEvent = $("#whichEventDiv input[type='radio']:checked").val();
-                        $.post('/remove_event', {id: id, 
-						 room: room_name, 
-						 repeat: calEvent.repeat,
-						 startEvent: startEvent, 
-						 num: calEvent.num},
-                               function() {
-				   calendar.fullCalendar( 'refetchEvents' );
-                                   console.log(id+" event deleted");
-                               }
-                              );
+	    if (calEvent.user == user) {
+		if (calEvent.repeat != "never") {
+		    $("#whichEventDiv").show();
+		} else {
+		    $("#whichEventDiv").hide();
+		}
+		$( "#dialog-update" ).dialog({
+		    resizable: false,
+                    modal: true,
+                    buttons: {
+			"Modifica": function() {
+                            var new_event_title = $( "#new-title" ).val()
+                            if (new_event_title) {
+				calEvent.title = new_event_title;
+				postUpdateToServer(room_name, calEvent);
+                            }
+                            $("#dialog-update").dialog( "close" );
+			},
+			"Rimuovi": function() {
+                            id = calEvent._id;
+                            $("#dialog-update").dialog( "close" );
+                            var startEvent = $("#whichEventDiv input[type='radio']:checked").val();
+                            $.post('/remove_event', {id: id, 
+						     room: room_name, 
+						     repeat: calEvent.repeat,
+						     startEvent: startEvent, 
+						     num: calEvent.num},
+				   function() {
+				       calendar.fullCalendar( 'refetchEvents' );
+                                       console.log(id+" event deleted");
+				   }
+				  );
+			}
                     }
-                }
-            })
+		})
+	    } else {
+		console.log("utente non valido");
+	    }
         },
         eventResize: function(calEvent, dayDelta, minuteDelta, revertFunc) {
             // console.log('user is resizing event '+calEvent.id);
             // console.log('start: '+calEvent.start+'\nend: '+calEvent.end);
-            if ((isOverlapping(calEvent)) || (calEvent.repeat != "never")) {
+            if ((isOverlapping(calEvent)) || (calEvent.repeat != "never") || (calEvent.user != user)) {
                 revertFunc();
             } else {
                 postUpdateToServer(room_name, calEvent);
             }
         },
         eventDrop: function(calEvent, dayDelta, minuteDelta, allDay, revertFunc) {
-            if ((isOverlapping(calEvent)) || (calEvent.repeat != "never")) {
+            if ((isOverlapping(calEvent)) || (calEvent.repeat != "never") || (calEvent.user != user)) {
                 revertFunc();
             } else {
                 postUpdateToServer(room_name, calEvent, allDay);
