@@ -18,6 +18,7 @@
 import datetime
 import time
 import bottle
+import os
 import pymongo
 import cgi
 import userDAO
@@ -284,7 +285,11 @@ def is_overlapping():
             return True
 
 
-connection_string = "mongodb://localhost"
+if 'MONGOHQ_URL' in os.environ:
+    connection_string = os.environ['MONGOHQ_URL']
+else:
+    connection_string = "mongodb://localhost"
+
 connection = pymongo.MongoClient(connection_string)
 database = connection.roomer
 
