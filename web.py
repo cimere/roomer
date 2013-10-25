@@ -79,6 +79,17 @@ def present_login():
     else:
         bottle.redirect("/")
 
+@bottle.get('/test')
+def present_login():
+
+    username = get_session_username()
+
+    if username is None:
+        return bottle.template("dev",
+                               dict(username="", login_error=""))
+    else:
+        bottle.redirect("/")
+
 @bottle.post('/login')
 def process_login():
     
