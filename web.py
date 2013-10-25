@@ -299,7 +299,7 @@ def is_overlapping():
 if 'MONGOHQ_URL' in os.environ:
     connection_string = os.environ['MONGOHQ_URL']
     connection = pymongo.MongoClient(connection_string)
-    database = connection.get_default_database.im_func(conn)
+    database = connection.get_default_database.im_func(connection)
 else:
     connection_string = "mongodb://localhost"
     connection = pymongo.MongoClient(connection_string)
