@@ -33,7 +33,7 @@ $(document).ready(function() {
 	firstHour: 8,
 	firstDay: 1,
 	minTime: "7:00am",
-	maxTime: "7:00pm",
+	maxTime: "9:00pm",
 	axisFormat: 'HH(:mm)',
 	timeFormat: 'HH:mm{ - HH:mm}',
 	columnFormat: {
