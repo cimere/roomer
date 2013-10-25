@@ -34,6 +34,8 @@ $(document).ready(function() {
 	firstDay: 1,
 	minTime: "7:00am",
 	maxTime: "7:00pm",
+	axisFormat: 'HH(:mm)',
+	timeFormat: 'HH:mm{ - HH:mm}',
 	columnFormat: {
 	    month: 'ddd',    // Mon
 	    week: 'ddd d', // Mon 31
