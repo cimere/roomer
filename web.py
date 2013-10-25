@@ -80,7 +80,7 @@ def present_login():
         bottle.redirect("/")
 
 @bottle.get('/test')
-def present_login():
+def present_test_login():
 
     username = get_session_username()
 
@@ -90,7 +90,7 @@ def present_login():
     else:
         bottle.redirect("/")
 
-@bottle.post('/login')
+@bottle.post('/test')
 def process_login():
     
     username = bottle.request.forms.get("username")
@@ -298,11 +298,12 @@ def is_overlapping():
 
 if 'MONGOHQ_URL' in os.environ:
     connection_string = os.environ['MONGOHQ_URL']
+    connection = pymongo.MongoClient(connection_string)
+    database = conn.get_default_database.im_func(conn)
 else:
     connection_string = "mongodb://localhost"
-
-connection = pymongo.MongoClient(connection_string)
-database = connection.roomer
+    connection = pymongo.MongoClient(connection_string)
+    database = connection.roomer
 
 users = userDAO.UserDAO(database)
 rooms = roomDAO.RoomDAO(database)
@@ -310,4 +311,4 @@ sessions = sessionDAO.SessionDAO(database)
 
 port = os.environ.get('PORT', '8080')
 bottle.debug(True)
-bottle.run(host='0.0.0.0', port=port, reloader=True) 
+bottle.run(host='localhost', port=port, reloader=True) 
