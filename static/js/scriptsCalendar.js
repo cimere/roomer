@@ -32,6 +32,8 @@ $(document).ready(function() {
         weekends: false, // will hide Saturdays and Sundays
 	firstHour: 8,
 	firstDay: 1,
+	minTime: "7:00am",
+	maxTime: "7:00pm",
 	columnFormat: {
 	    month: 'ddd',    // Mon
 	    week: 'ddd d', // Mon 31
