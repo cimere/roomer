@@ -296,6 +296,6 @@ database = connection.roomer
 users = userDAO.UserDAO(database)
 rooms = roomDAO.RoomDAO(database)
 sessions = sessionDAO.SessionDAO(database)
-
+port = os.environ.get('PORT', '8080')
 bottle.debug(True)
-bottle.run(host='localhost', port=8080, reloader=True) 
+bottle.run(host='localhost', port=port, reloader=True) 
