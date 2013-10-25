@@ -85,7 +85,7 @@ def present_login():
     username = get_session_username()
 
     if username is None:
-        return bottle.template("dev",
+        return bottle.template("test",
                                dict(username="", login_error=""))
     else:
         bottle.redirect("/")
