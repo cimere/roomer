@@ -9,13 +9,14 @@
   <div id="wrap">
     <div class="container">
       <form class="form-signin" method="post">
-        <h2 class="form-signin-heading">Login</h2>
-        <label class="sr-only" for="username">Utente</label>
-        <input type="text" name="username" id="username" class="form-control" autofocus value="{{username}}">
-        <label class="checkbox">
-          <input type="checkbox" value="remember-me"> Ricordami
-        </label>
-        <input type="submit" class="btn btn-lg btn-primary btn-block" value="Entra">
+         <h2 class="form-signin-heading">Login</h2>
+      <!--   <label class="sr-only" for="username">Utente</label> -->
+      <!--   <input type="text" name="username" id="username" class="form-control" autofocus value="{{username}}"> -->
+      <!--   <label class="checkbox"> -->
+      <!--     <input type="checkbox" value="remember-me"> Ricordami -->
+      <!--   </label> -->
+      <!--   <input type="submit" class="btn btn-lg btn-primary btn-block" value="Entra"> -->
+      <a href="http://semgmt02" class="btn btn-lg btn-primary btn-block">Entra</a>
       </form>
     </div> <!-- /container -->
   </div>

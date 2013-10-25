@@ -63,7 +63,6 @@ def home():
         bottle.redirect("/login")
     else:
         rooms_data = rooms.get_rooms()
-        print rooms_data
         return bottle.template('home', dict(username=username,
                                             rooms=rooms_data))
 
