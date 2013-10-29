@@ -34,6 +34,7 @@ $(document).ready(function() {
 	firstDay: 1,
 	minTime: "7:00am",
 	maxTime: "9:00pm",
+	ignoreTimezone: false,
 	axisFormat: 'HH(:mm)',
 	timeFormat: 'HH:mm{ - HH:mm}',
 	columnFormat: {
