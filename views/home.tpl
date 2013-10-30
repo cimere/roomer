@@ -8,12 +8,12 @@
 <!-- Wrap all page content here -->
   <div id="wrap">
 
-    % include header rooms=[room['name'] for room in rooms],username=username
+    % include header rooms=[room['name'] for room in rooms],username=user['firstname']
 
 
     <!-- Begin page content -->
     <div class="container">
-      <h2>Ciao {{username}}</h2>
+      <h2>Ciao {{user['firstname']}}</h2>
       <div>
         <h4>Scegli una stanza da prenotare.</br></h4>
         <em>Hint: puoi sceglierla anche dalla barra di navigazione in alto.</em>

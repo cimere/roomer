@@ -63,8 +63,9 @@ def home():
         print "welcome: can't identify user...redirecting to signup"
         bottle.redirect("/login")
     else:
+        user_data = users.get_user(username)
         rooms_data = rooms.get_rooms()
-        return bottle.template('home', dict(username=username,
+        return bottle.template('home', dict(user = user_data,
                                             rooms=rooms_data))
 
 # displays the initial blog login form
@@ -137,8 +138,9 @@ def get_room(name):
         bottle.redirect("/login")
     else:
         room_data = rooms.get_room(name)
+        user_data = users.get_user(username)
         rooms_names = rooms.get_rooms()
-        return bottle.template('room', dict(user=username,
+        return bottle.template('room', dict(user=user_data,
                                             room_data=room_data,
                                             rooms_names=rooms_names))
 
