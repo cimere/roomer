@@ -123,7 +123,7 @@ class RoomDAO:
                         {
                             "_id": {"$ne": id},
                             "sec_s": {"$lt": end_hour*3600 + end_min*60},
-                            "sec_e": {"$gt": start_hour*3600 + end_hour*60}
+                            "sec_e": {"$gt": start_hour*3600 + start_min*60}
                         }
                     },
                     {
