@@ -286,6 +286,7 @@ def is_overlapping():
     if repeat != "never":
         # recurring event, check for overlapping
         until =  str_to_date(bottle.request.forms.get("until")) 
+        print room, start, start.hour, start.minute, end.hour, end.minute, until
         overlapping = rooms.check_overlapping(room, id, start,
                                               start.hour, start.minute,
                                               end.hour, end.minute,

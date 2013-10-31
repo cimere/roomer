@@ -95,7 +95,7 @@ class RoomDAO:
                     {
                         "$match":
                         {
-                            "Reservations.end": {"$lte": until},
+                            "reservations.end": {"$lte": until},
                             "reservations.start": {"$gte": start}
                         }
                     },

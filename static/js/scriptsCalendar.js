@@ -26,30 +26,53 @@ $(document).ready(function() {
     var calendar = $('#calendar').fullCalendar({
 	
         // options
-	aspectRatio: 1.6,
-        defaultView: 'agendaWeek',
-	allDaySlot: false,
-        weekends: false, // will hide Saturdays and Sundays
-	firstHour: 8,
-	firstDay: 1,
-	minTime: "7:00am",
-	maxTime: "9:00pm",
-	ignoreTimezone: false,
-	axisFormat: 'HH(:mm)',
-	timeFormat: 'HH:mm{ - HH:mm}',
+	// Text/Time Customization
+	monthNames: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+		     'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
+	monthNamesShort: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu',
+			  'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
+	dayNames: ['Domenica', 'Lunedi', 'Martedi', 'Mercoledi',
+		   'Giovedi', 'Venerdi', 'Sabato', 'Domenica'],
+	dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mer',
+			'Gio', 'Ven', 'Sab', 'Dom'],
+	Timeformat: 'HH:mm{ - HH:mm}',
 	columnFormat: {
-	    month: 'ddd',    // Mon
-	    week: 'ddd d', // Mon 31
-	    day: 'dddd d'  // Monday 31
+	    month: 'ddd',    // Lun
+	    week: 'ddd d', // Lun 31
+	    day: 'dddd d'  // Lunedi 31
 	},
+	buttonText: {
+            prev:     '&lsaquo;', // <
+	    next:     '&rsaquo;', // >
+	    prevYear: '&laquo;',  // <<
+	    nextYear: '&raquo;',  // >>
+	    today:    'Oggi',
+	    month:    'Mese',
+	    week:     'Settimana',
+	    day:      'Giorno'
+	},
+	// General Display
+	firstDay: 1,
+	aspectRatio: 1.6,
+        weekends: false, // will hide Saturdays and Sundays
 	header: {
             left: 'prev,next today',
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
+	// Views
+        defaultView: 'agendaWeek',
+	// Agenda Options
+	allDaySlot: false,
+	firstHour: 8,
+	minTime: "7:00am",
+	maxTime: "9:00pm",
+	axisFormat: 'HH(:mm)',
+	// Selection
         selectable: true,
         selectHelper: true,
-
+	// Event Data
+	ignoreTimezone: false,
         // callbacks
         select: function(start, end, allDay) {
             
