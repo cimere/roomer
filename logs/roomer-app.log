@@ -1,0 +1,59 @@
+2013-11-03 16:12:47,794 Started.
+2013-11-03 16:12:47,893 Started.
+2013-11-03 16:12:59,300 Updating event {'allDay': False, 'end': datetime.datetime(2013, 10, 29, 13, 0), 'room': 'TRUST', 'title': 'singolo-mod-again', 'until': '0', 'start': datetime.datetime(2013, 10, 29, 11, 0), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383491042819QOHWBX', 'repeat': 'never'}
+2013-11-03 16:14:40,085 Started.
+2013-11-03 16:16:54,594 Started.
+2013-11-03 16:16:54,689 Started.
+2013-11-03 16:17:00,637 Removing only occurence number 0 from event {'scope': 'onlyThis', 'repeat': 'never', 'num': 0, 'id': 'cmeregalli1383491042819QOHWBX', 'room': 'TRUST'}
+2013-11-03 16:18:12,620 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 10, 29, 13, 30), 'room': 'TRUST', 'title': 'singolo', 'until': 'T23:59:59', 'start': datetime.datetime(2013, 10, 29, 13, 0), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383491892603VDFAWR', 'repeat': 'never'}
+2013-11-03 16:18:12,621 Event corretly inserted.
+2013-11-03 16:18:23,121 Updating event {'allDay': False, 'end': datetime.datetime(2013, 10, 29, 14, 0), 'room': 'TRUST', 'title': 'singolo', 'until': '0', 'start': datetime.datetime(2013, 10, 29, 13, 0), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383491892603VDFAWR', 'repeat': 'never'}
+2013-11-03 16:18:29,816 Updating event {'allDay': False, 'end': datetime.datetime(2013, 10, 29, 15, 0), 'room': 'TRUST', 'title': 'singolo', 'until': '0', 'start': datetime.datetime(2013, 10, 29, 13, 0), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383491892603VDFAWR', 'repeat': 'never'}
+2013-11-03 16:18:36,956 Updating event {'allDay': False, 'end': datetime.datetime(2013, 10, 29, 16, 0), 'room': 'TRUST', 'title': 'singolo', 'until': '0', 'start': datetime.datetime(2013, 10, 29, 13, 0), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383491892603VDFAWR', 'repeat': 'never'}
+2013-11-03 16:18:39,160 Updating event {'allDay': False, 'end': datetime.datetime(2013, 10, 30, 16, 0), 'room': 'TRUST', 'title': 'singolo', 'until': '0', 'start': datetime.datetime(2013, 10, 30, 13, 0), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383491892603VDFAWR', 'repeat': 'never'}
+2013-11-03 16:18:41,131 Updating event {'allDay': False, 'end': datetime.datetime(2013, 10, 31, 15, 30), 'room': 'TRUST', 'title': 'singolo', 'until': '0', 'start': datetime.datetime(2013, 10, 31, 12, 30), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383491892603VDFAWR', 'repeat': 'never'}
+2013-11-03 16:18:42,840 Updating event {'allDay': False, 'end': datetime.datetime(2013, 10, 29, 16, 0), 'room': 'TRUST', 'title': 'singolo', 'until': '0', 'start': datetime.datetime(2013, 10, 29, 13, 0), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383491892603VDFAWR', 'repeat': 'never'}
+2013-11-03 16:18:46,973 Removing only occurence number 0 from event {'scope': 'onlyThis', 'repeat': 'never', 'num': 0, 'id': 'cmeregalli1383491892603VDFAWR', 'room': 'TRUST'}
+2013-11-03 16:20:40,416 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 10, 29, 13, 0), 'room': 'TRUST', 'title': 'singolo', 'until': 'T23:59:59', 'start': datetime.datetime(2013, 10, 29, 12, 0), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383492040395PNJJIO', 'repeat': 'never'}
+2013-11-03 16:20:40,418 Event corretly inserted.
+2013-11-03 16:20:42,750 Removing only occurence number 0 from event {'scope': 'onlyThis', 'repeat': 'never', 'num': 0, 'id': 'cmeregalli1383492040395PNJJIO', 'room': 'TRUST'}
+2013-11-03 16:20:56,409 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 10, 29, 13, 0), 'room': 'TRUST', 'title': 'singolo', 'until': 'T23:59:59', 'start': datetime.datetime(2013, 10, 29, 12, 0), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383492056389UZLNNC', 'repeat': 'never'}
+2013-11-03 16:20:56,410 Event corretly inserted.
+2013-11-03 16:21:02,651 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 10, 28, 13, 0), 'room': 'TRUST', 'title': 'singolo', 'until': '2013-11-18T23:59:59', 'start': datetime.datetime(2013, 10, 28, 12, 0), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383492062638MVCGQP', 'repeat': 'day'}
+2013-11-03 16:21:02,661 Overlapping events: ['2013-10-29']
+2013-11-03 16:21:02,661 Event not inserted due to overlapping conditions.
+2013-11-03 16:21:11,407 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 10, 28, 12, 30), 'room': 'TRUST', 'title': 'singolo', 'until': '2013-11-18T23:59:59', 'start': datetime.datetime(2013, 10, 28, 11, 30), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383492071394JRRWRH', 'repeat': 'day'}
+2013-11-03 16:21:11,409 Overlapping events: ['2013-10-29']
+2013-11-03 16:21:11,409 Event not inserted due to overlapping conditions.
+2013-11-03 16:21:14,343 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 10, 28, 13, 30), 'room': 'TRUST', 'title': 'singolo', 'until': '2013-11-18T23:59:59', 'start': datetime.datetime(2013, 10, 28, 12, 30), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383492074330RFUXPB', 'repeat': 'day'}
+2013-11-03 16:21:14,345 Overlapping events: ['2013-10-29']
+2013-11-03 16:21:14,345 Event not inserted due to overlapping conditions.
+2013-11-03 16:21:20,592 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 10, 29, 14, 0), 'room': 'TRUST', 'title': 'singolo', 'until': '2013-11-18T23:59:59', 'start': datetime.datetime(2013, 10, 29, 13, 0), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383492080581CPUNDZ', 'repeat': 'day'}
+2013-11-03 16:21:20,594 No overlapping events found.
+2013-11-03 16:21:20,614 Event corretly inserted.
+2013-11-03 16:21:33,854 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 10, 28, 14, 0), 'room': 'TRUST', 'title': 'singolo', 'until': '2013-11-18T23:59:59', 'start': datetime.datetime(2013, 10, 28, 13, 0), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383492093842TWRFVS', 'repeat': 'week'}
+2013-11-03 16:21:33,857 Overlapping events: ['2013-11-04', '2013-11-11', '2013-11-18']
+2013-11-03 16:21:33,857 Event not inserted due to overlapping conditions.
+2013-11-03 16:21:39,619 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 10, 28, 13, 0), 'room': 'TRUST', 'title': 'singolo', 'until': '2013-11-18T23:59:59', 'start': datetime.datetime(2013, 10, 28, 12, 0), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383492099608ELVBZF', 'repeat': 'week'}
+2013-11-03 16:21:39,621 No overlapping events found.
+2013-11-03 16:21:39,626 Event corretly inserted.
+2013-11-03 16:21:50,033 Updating event {'allDay': False, 'end': datetime.datetime(2013, 10, 29, 15, 30), 'room': 'TRUST', 'title': 'singolo', 'until': '0', 'start': datetime.datetime(2013, 10, 29, 14, 30), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383492056389UZLNNC', 'repeat': 'never'}
+2013-11-03 16:21:57,072 Removing only occurence number 0 from event {'scope': 'onlyThis', 'repeat': 'day', 'num': 0, 'id': 'cmeregalli1383492080581CPUNDZ', 'room': 'TRUST'}
+2013-11-03 16:22:00,421 Removing only occurence number 0 from event {'scope': 'onlyThis', 'repeat': 'week', 'num': 0, 'id': 'cmeregalli1383492099608ELVBZF', 'room': 'TRUST'}
+2013-11-03 16:22:08,064 Removing only occurence number 3 from event {'scope': 'onlyThis', 'repeat': 'week', 'num': 3, 'id': 'cmeregalli1383492099608ELVBZF', 'room': 'TRUST'}
+2013-11-03 16:22:17,382 Removing all occurences of event {'scope': 'all', 'repeat': 'day', 'num': 1, 'id': 'cmeregalli1383492080581CPUNDZ', 'room': 'TRUST'}
+2013-11-03 16:23:01,314 Started.
+2013-11-03 16:23:09,088 Removing all occurences of event {'scope': 'all', 'repeat': 'day', 'num': 1, 'id': 'cmeregalli1383492080581CPUNDZ', 'room': 'TRUST'}
+2013-11-03 16:23:12,446 Removing all occurences of event {'scope': 'all', 'repeat': 'never', 'num': 0, 'id': 'cmeregalli1383492056389UZLNNC', 'room': 'TRUST'}
+2013-11-03 16:23:15,641 Removing all occurences of event {'scope': 'all', 'repeat': 'week', 'num': 1, 'id': 'cmeregalli1383492099608ELVBZF', 'room': 'TRUST'}
+2013-11-03 16:23:41,412 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 10, 28, 12, 0), 'room': 'TRUST', 'title': 'ripete-ogni-giorni', 'until': '2013-11-27T23:59:59', 'start': datetime.datetime(2013, 10, 28, 10, 0), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383492221395SKEKEI', 'repeat': 'day'}
+2013-11-03 16:23:41,421 No overlapping events found.
+2013-11-03 16:23:41,478 Event corretly inserted.
+2013-11-03 16:24:03,698 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 10, 28, 13, 0), 'room': 'TRUST', 'title': 'ripete-ogni-settimana', 'until': '2013-11-27T23:59:59', 'start': datetime.datetime(2013, 10, 28, 12, 0), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383492243683CPVBYP', 'repeat': 'week'}
+2013-11-03 16:24:03,701 No overlapping events found.
+2013-11-03 16:24:03,704 Event corretly inserted.
+2013-11-03 16:24:13,034 Removing only occurence number 22 from event {'scope': 'onlyThis', 'repeat': 'day', 'num': 22, 'id': 'cmeregalli1383492221395SKEKEI', 'room': 'TRUST'}
+2013-11-03 16:24:16,487 Removing only occurence number 1 from event {'scope': 'onlyThis', 'repeat': 'week', 'num': 1, 'id': 'cmeregalli1383492243683CPVBYP', 'room': 'TRUST'}
+2013-11-03 16:24:21,727 Removing only occurence number 18 from event {'scope': 'onlyThis', 'repeat': 'day', 'num': 18, 'id': 'cmeregalli1383492221395SKEKEI', 'room': 'TRUST'}
+2013-11-03 16:24:24,772 Removing all occurences of event {'scope': 'all', 'repeat': 'day', 'num': 2, 'id': 'cmeregalli1383492221395SKEKEI', 'room': 'TRUST'}
+2013-11-03 16:24:27,499 Removing all occurences of event {'scope': 'all', 'repeat': 'week', 'num': 2, 'id': 'cmeregalli1383492243683CPVBYP', 'room': 'TRUST'}
