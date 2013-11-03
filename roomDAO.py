@@ -59,14 +59,26 @@ class RoomDAO:
 
     def update_event(self, room, event):
 
-        query = { "name": room, "reservations.id": event["id"]}
-        event = { "$set": { "reservations.$.title" : event["title"],
-                            "reservations.$.start" : event["start"],
-                            "reservations.$.end" : event["end"],
-                            "reservations.$.allDay" : event["allDay"],
-                            "reservations.$.until": event["until"] } 
-                        }
-        self.db.rooms.update( query, event)
+        if event['num'] is None:
+            # Limitation: update on all events can modify only title.
+            pipeline = [{"$match": {"name":"TRUST"}},
+                        {"$unwind": "$reservations"},
+                        {"$match": {"reservations.id": event['id']}},
+                        {"$group": {"_id": "$reservations.id", "max_num": {"$max": "$reservations.num"}}}
+                    ]
+            result = self.db.rooms.aggregate(pipeline)
+            max_num = int(result['result'][0]['max_num'])
+
+            for num in range(max_num):
+                print num
+                query = { "name": room, "reservations.id": event['id'], "reservations.num": num }
+                self.db.rooms.update( query, { "$set": { "reservations.$.title" : event["title"] } })
+        else:
+            query = { "name": room, "reservations.id": event['id'], "reservations.num": event['num']}
+            event = { "$set": { "reservations.$.title" : event["title"],
+                                "reservations.$.start" : event["start"],
+                                "reservations.$.end" : event["end"] } }
+            self.db.rooms.update(query, event)
 
     def remove_event(self, room, id, num):
         
@@ -78,60 +90,28 @@ class RoomDAO:
         
         self.db.rooms.update({"name": room}, {"$pull": {"reservations": {"id": id, "num": {"$gte": here}}}})
         
-    def check_overlapping(self, room, id, start, start_hour, start_min, end_hour, end_min, until):
+    def check_overlapping(self, room, id, start, start_hour, start_min, end_hour, end_min, until, week_day=None):
         
-        try:
-            cursor = self.rooms.aggregate(
-                [
-                    {
-                        "$match": 
-                        {
-                            "name": room
-                        }
-                    },
-                    {
-                        "$unwind": "$reservations"
-                    },
-                    {
-                        "$match":
-                        {
-                            "reservations.end": {"$lte": until},
-                            "reservations.start": {"$gte": start}
-                        }
-                    },
-                    {
-                        "$project":
-                        {
-                            "_id": "$reservations.id",
-                            "day":{"$dayOfYear": "$reservations.start"},
-                            "s_hour": {"$hour": "$reservations.start"}, 
-                            "s_minutes": {"$minute": "$reservations.start"}, 
-                            "e_hour": {"$hour": "$reservations.end" }, 
-                            "e_minutes": {"$minute": "$reservations.end"}
-                        }
-                    },
-                    {
-                        "$project": 
-                        {
-                            "day": 1, 
+        pipeline = [
+            { "$match": { "name": room }},
+            { "$unwind": "$reservations" },
+            { "$match": { "reservations.end": {"$lte": until}, "reservations.start": {"$gte": start} } },
+            { "$project": { "_id": "$reservations.id", "day":{"$dayOfYear": "$reservations.start"}, "week_day": {"$dayOfWeek": "$reservations.start"},
+                            "s_hour": {"$hour": "$reservations.start"}, "s_minutes": {"$minute": "$reservations.start"}, 
+                            "e_hour": {"$hour": "$reservations.end" }, "e_minutes": {"$minute": "$reservations.end"} } },
+            { "$project": { "day": 1,  "week_day": 1,
                             "sec_s": {"$add": [{"$multiply": ["$s_hour", 3600]}, {"$multiply": ["$s_minutes", 60]}]},
-                            "sec_e": {"$add": [{"$multiply": ["$e_hour", 3600]}, {"$multiply": ["$e_minutes", 60]}]}
-                        }
-                    },
-                    {
-                        "$match": 
-                        {
-                            "_id": {"$ne": id},
-                            "sec_s": {"$lt": end_hour*3600 + end_min*60},
-                            "sec_e": {"$gt": start_hour*3600 + start_min*60}
-                        }
-                    },
-                    {
-                        "$group": 
-                        {"_id": "$day","count": {"$sum": 1}}
-                    }
-                ]
-            )
+                            "sec_e": {"$add": [{"$multiply": ["$e_hour", 3600]}, {"$multiply": ["$e_minutes", 60]}]} } }
+
+        ]
+
+        if week_day is None:
+            pipeline.append({ "$match":   { "_id": {"$ne": id}, "sec_s": {"$lt": end_hour*3600 + end_min*60}, "sec_e": {"$gt": start_hour*3600 + start_min*60} } })
+        else:
+            pipeline.append({ "$match":   { "_id": {"$ne": id}, "week_day": week_day, "sec_s": {"$lt": end_hour*3600 + end_min*60}, "sec_e": {"$gt": start_hour*3600 + start_min*60} } })
+                            
+        try:
+            cursor = self.rooms.aggregate(pipeline)
         except:
             print "Unable to query database for user"    
         

@@ -38,7 +38,7 @@
             <form>
               <label><input type="radio" id="onlyThis" name="repeat" value="onlyThis" checked/>   Solo questo</label><br />
               <!-- <label><input type="radio" id="fromHere" name="repeat" value="fromHere" />   Da qui</label><br />  -->
-              <label><input type="radio" id="fromStart" name="repeat" value="fromStart" checked /> Tutto</label><br />
+              <label><input type="radio" id="fromStart" name="repeat" value="all"  /> Tutto</label><br />
             </form>
 	  </div>
       </div>

@@ -106,41 +106,26 @@ $(document).ready(function() {
 	},
 	eventClick: function(calEvent, jsEvent, view) {
 	    if (calEvent.user == user) {
-		if (calEvent.repeat != "never") {
-		    $("#whichEventDiv").show();
+		var buttons = {}
+		$( "#new-title" ).val(calEvent.title);
+		if (calEvent.repeat == "never") {
+		    var dialog_title = "Modifica evento";
+		    addModifyButton(buttons, calEvent);
+		    addRemoveButton(buttons, calEvent);
+                    $("#whichEventDiv").hide();
 		} else {
-		    $("#whichEventDiv").hide();
+		    var dialog_title = "Rimuovi Evento";
+		    addRemoveButton(buttons, calEvent);
+		    $("#whichEventDiv").show();
 		}
 		$( "#dialog-update" ).dialog({
 		    resizable: false,
                     modal: true,
-                    buttons: {
-			"Modifica": function() {
-                            var new_event_title = $( "#new-title" ).val()
-                            if (new_event_title) {
-				calEvent.title = new_event_title;
-				postUpdateToServer(room_name, calEvent);
-                            }
-                            $("#dialog-update").dialog( "close" );
-			},
-			"Rimuovi": function() {
-                            id = calEvent._id;
-                            $("#dialog-update").dialog( "close" );
-                            var startEvent = $("#whichEventDiv input[type='radio']:checked").val();
-                            $.post('/remove_event', {id: id, 
-						     room: room_name, 
-						     repeat: calEvent.repeat,
-						     startEvent: startEvent, 
-						     num: calEvent.num},
-				   function() {
-				       calendar.fullCalendar( 'refetchEvents' );
-                                       console.log(id+" event deleted");
-				   }
-				  );
-			}
-                    }
+                    buttons: buttons,
+		    title: dialog_title
 		})
 	    } else {
+
 		console.log("utente non valido");
 	    }
         },
@@ -178,6 +163,40 @@ $(document).ready(function() {
         ]
 
     })
+
+    // Buttons
+
+    function addRemoveButton(buttons, calEvent) {
+	
+	buttons["Rimuovi"] = function() {
+            id = calEvent._id;
+            $("#dialog-update").dialog( "close" );
+            var scope = $("#whichEventDiv input[type='radio']:checked").val();
+            $.post('/remove_event', {id: id, 
+				     room: room_name, 
+				     repeat: calEvent.repeat,
+				     scope: scope,
+				     num: calEvent.num},
+		   function() {
+		       calendar.fullCalendar( 'refetchEvents' );
+                       console.log(user + " removed event " + id);
+		   }
+		  );
+	}
+    }
+
+    function addModifyButton(buttons, calEvent) {
+
+	buttons["Modifica"] =  function() {
+            var new_event_title = $( "#new-title" ).val()
+            if (new_event_title) {
+		var scope = $("#whichEventDiv input[type='radio']:checked").val();
+		calEvent.title = new_event_title;
+		postUpdateToServer(room_name, calEvent);
+            }
+            $("#dialog-update").dialog( "close" );
+	}
+    }
 
     // Helper functions
 
@@ -250,7 +269,7 @@ $(document).ready(function() {
         // } else {
         //     var tempEnd = Date.parse(calEvent.end)/1000;
         // };
-	var startEvent = $("#whichEventDiv input[type='radio']:checked").val();
+	var scope = $("#whichEventDiv input[type='radio']:checked").val();
         $.post('/update_event',
                {
                    id: calEvent.id,
@@ -259,13 +278,11 @@ $(document).ready(function() {
                    user: calEvent.user,
 		   start: Date.parse(calEvent.start)/1000, // to UNIX format
 		   end: Date.parse(calEvent.end)/1000,
-                   // start: start,
-                   // end: end,
-                   allDay: calEvent.allDay,
+		   allDay: calEvent.allDay,
 		   repeat: calEvent.repeat,
 		   until: calEvent.until,
 		   num: calEvent.num,
-		   startEvent: startEvent
+		   scope: scope
                }, 
                function() {
 		   console.log(user + " modified event id " + calEvent.id);
@@ -289,8 +306,6 @@ $(document).ready(function() {
                    user: user,
 		   start: Date.parse(start)/1000, // to UNIX format
 		   end: Date.parse(end)/1000,
-                   // start: start,
-                   // end: end,
                    allDay: allDay,
 		   repeat: repeat,
 		   until: until + "T23:59:59",

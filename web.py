@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-#
 
 import datetime
 import time
@@ -21,21 +20,21 @@ import bottle
 import os
 import pymongo
 import cgi
+import string
+import logging
 import userDAO
 import roomDAO
 import sessionDAO
-import string
 
-# TODO ADD session management (done)
+# Logging
+app_root = os.path.dirname(__file__)
+log_file = 'logs/roomer-app.log'
+logging.basicConfig(format='%(asctime)s %(message)s',
+                    filename=log_file,
+                    level=logging.INFO)
+logging.info('Started.')
 
 # Static files
-
-# @bottle.get('/static/<filepath:path>')
-# def server_static(filepath):
-
-#     root_url = '/home/mere/Dropbox/me/programming/roomer/static'
-#     return bottle.static_file(filepath, root=root_url)
-
 @bottle.get('/<filename:re:.*\.js>')
 def javascripts(filename):
     return bottle.static_file(filename, root='static/js')
@@ -60,11 +59,12 @@ def home():
     username = get_session_username()
 
     if username is None:
-        print "welcome: can't identify user...redirecting to signup"
+        logging.info("Welcome: can't identify user...redirecting to signup")
         bottle.redirect("/login")
     else:
         user_data = users.get_user(username)
         rooms_data = rooms.get_rooms()
+        logging.info("Welcome:", username)
         return bottle.template('home', dict(user = user_data,
                                             rooms=rooms_data))
 
@@ -95,7 +95,7 @@ def present_test_login():
 def process_login():
     
     username = bottle.request.forms.get("username")
-    print "user submitted ", username
+    logging.info("Test user submitted: %s", username)
 
     user_record = users.validate_login(username)
     if user_record:
@@ -126,8 +126,6 @@ def process_logout():
     sessions.end_session(cookie)
     bottle.response.set_cookie("session", "")
     bottle.redirect("login")
-    # enable in prod:
-    #bottle.redirect("/roomer")
 
 @bottle.get('/room/<name>')
 def get_room(name):
@@ -135,6 +133,7 @@ def get_room(name):
     username = get_session_username()  # see if user is logged in
     
     if username is None:
+        logging.info("Can't identify user...redirecting to signup")
         bottle.redirect("/login")
     else:
         room_data = rooms.get_room(name)
@@ -161,98 +160,59 @@ def get_events(name):
     return rooms.get_event(name)
 
 @bottle.post('/insert_event')
-def insert_event():
-
-    events = []
-
-    id = bottle.request.forms.get("id")
-    title = bottle.request.forms.get("title")
-    user = bottle.request.forms.get("user")
-    room = bottle.request.forms.get("room")
-    repeat = bottle.request.forms.get("repeat")
-    until = bottle.request.forms.get("until")
-    start = ISO_str_to_date(bottle.request.forms.get("start"))
-    end =  ISO_str_to_date(bottle.request.forms.get("end"))
-    allDay = eval(string.capitalize(bottle.request.forms.get("allDay")))
-    repeat = bottle.request.forms.get("repeat")
-    start_event = bottle.request.forms.get("startEvent")
-    num = int(bottle.request.forms.get("num")) # if insert POST, num = 0 
+def new_insert():
+    items = bottle.request.forms.items()
+    event = to_dict(items)
+    logging.info("Preparing to inserting event %s", event)
     # Compute data to manage recursive events
-    options = {"never": 0, # never repeat
-               "day": 1, 
-               "week": 7
-    }
-    delta = options[repeat]
+    options = { "never": 0, "day": 1, "week": 7 }
+    delta = options[event['repeat']]
     if delta == 0:
         # non recurring event
         n_events = 1
-        until = 0
+        event['until'] = 0
     else:
         # recurring event, check for overlapping
-        until =  str_to_date(until)
+        event['until'] =  str_to_date(event['until'])
         if is_overlapping():
+            logging.info("Event not inserted due to overlapping conditions.")
             return False
         else:
-            # not overlapping
-            if start_event == 'fromHere':
-                n_events = (until - start).days / delta + 1 # count the first event too.
-            elif start_event == 'onlyThis':
-                n_events = 1
-            else: #fromStart
-                n_events = (until - start).days / delta + 1 + num # count the first event too.
-                start = start - datetime.timedelta(days=num)
-                end = end - datetime.timedelta(days=num)
-
-        
+            n_events = (event['until'] - event['start']).days / delta + event['num'] +1  # count the first event too.
+    
     # Generate event(s)
+    events = []
     for count in range(n_events):
-        event = dict(
-            id = id,
-            title = title,
-            user = user,
-            start = start,
-            end = end,
-            allDay = allDay,
-            repeat = repeat,
-            until = until,
-            num = count
-        )
-        start += datetime.timedelta(delta)
-        if allDay:
-            pass
-        else:
-            end += datetime.timedelta(delta)
-        events.append(event)
-        
-    rooms.insert_event(room, events)
-
+        print events
+        events.append(event.copy())
+        event['start'] += datetime.timedelta(delta)
+        event['end'] += datetime.timedelta(delta)
+        event['num'] += 1
+    rooms.insert_event(event['room'], events)
+    logging.info("Event corretly inserted.")
 
 @bottle.post('/update_event')
 def update_event():
-    if is_overlapping():
-        return False
-    remove_event()
-    insert_event()
-    repeat = bottle.request.forms.get("repeat")
+    ''' Only title update for recursive event
+    datetime update for single events'''
+    items = bottle.request.forms.items()
+    event = to_dict(items)
+    if event['scope'] == 'all':
+        event['num'] = None
+    logging.info("Updating event %s", event)
+    rooms.update_event(event['room'], event)
 
 @bottle.post('/remove_event')
 def remove_event():
 
-    room = bottle.request.forms.get("room")
-    id = bottle.request.forms.get("id")
-    repeat = bottle.request.forms.get("repeat")
-    start_event = bottle.request.forms.get("startEvent")
-    if repeat == "never":
-        rooms.remove_event(room, id, 0)
+    items = bottle.request.forms.items()
+    event = to_dict(items)
+    if event['scope'] == "onlyThis":
+        logging.info("Removing only occurence number %s from event %s", event['num'], event)
+        rooms.remove_event(event['room'], event['id'], event['num'])
     else:
-        if start_event == "onlyThis":
-            num = int(bottle.request.forms.get("num"))
-            rooms.remove_event(room, id, num)
-        elif start_event == "fromHere":
-            num = int(bottle.request.forms.get("num"))
-            rooms.remove_event_from_here(room, id, num)
-        else: # fromStart
-            rooms.remove_event_from_here(room, id, 0)
+        logging.info("Removing all occurences of event %s",event)
+        rooms.remove_event_from_here(event['room'], event['id'], 0)
 
 # Helper Functions  
 
@@ -275,6 +235,33 @@ def str_to_date(string):
     date = datetime.datetime.fromtimestamp(unix)
     return date
 
+def day_to_date(day_number):
+    ''' 
+    Takes an integer input (e.g. 4) and returns a date (e.g. 1/4/2013)
+    2013 = current year
+    http://answers.yahoo.com/question/index?qid=20100805222947AAqMKfh
+    '''
+    first_of_year = datetime.datetime(time.localtime().tm_year, 1, 1)
+    first_ordinal = first_of_year.toordinal()
+    day_ordinal = first_ordinal - 1 + day_number
+    return datetime.date.fromordinal(day_ordinal) 
+
+def to_dict(items):
+    ''' put a bottle.request.forms dict in a standard python dict
+    and do some data type cast to store data in  mongoDB '''
+    d = {}
+    for key, value in items:
+        d[key] = value
+    d_keys = d.keys()
+    if 'start' in d.keys():
+        d['start'] = ISO_str_to_date(d['start'])
+    if 'end' in d.keys():
+        d['end'] =  ISO_str_to_date(d['end'])
+    if 'num' in d.keys():
+        d['num'] = int(d['num'])
+    if 'allDay' in d.keys():
+        d['allDay'] = eval(string.capitalize(d['allDay']))
+    return d
 
 def is_overlapping():
 
@@ -286,17 +273,25 @@ def is_overlapping():
     if repeat != "never":
         # recurring event, check for overlapping
         until =  str_to_date(bottle.request.forms.get("until")) 
-        print room, start, start.hour, start.minute, end.hour, end.minute, until
+        if repeat == "week":
+            week_day = start.isoweekday() + 1 # on mongodb week start on Sunday
+        else:
+            week_day = None
+
         overlapping = rooms.check_overlapping(room, id, start,
                                               start.hour, start.minute,
                                               end.hour, end.minute,
-                                              until)
-        print overlapping
+                                              until, week_day)
         if overlapping == []:
             # not overlapping
+            logging.info("No overlapping events found.")
             return False
         else:
-            return True
+            overlapping_events = []
+            for event in overlapping:
+                overlapping_events.append(day_to_date(event['day']).isoformat())
+            logging.info("Overlapping events: %s", repr(overlapping_events))
+            return True            
 
 
 if 'MONGOHQ_URL' in os.environ:

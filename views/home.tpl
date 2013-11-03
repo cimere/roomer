@@ -22,7 +22,13 @@
       <div class="well">
 	<ul class="list-unstyled">
 	  %for room in rooms:
-	  <li><a href="/room/{{room['name']}}">{{room['name']}}</a> - {{room['desc']}} Interno: {{room['tel']}}</li>
+	  <li>
+	    <div class="row">
+	      <div class="col-md-2"><a href="\room\{{room['name']}}"><img src="/images/{{room['name']}}.png" /></a></div>
+	      <div class="col-md-10">{{room['desc']}} Interno: {{room['tel']}}</div>
+	    </div> <!-- /row -->  
+	  </li>
+	  <br />
 	  %end
 	  <li>Corner AGILITY, postazione per 3 persone con tavolino e punti rete (non prenotabile).</li>
 	</ul>

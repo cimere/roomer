@@ -37,10 +37,10 @@ code {
   height: 60px;
   background-color: #f5f5f5;
 }
-/*
-.footer-logo {
-	background: url(../poweredbyMongoDB.png) no-repeat center center;
-	height: 60px;
+/* Rooms images */
+#TRUST {
+	background: url(/images/trust.png) no-repeat left center;
+	height: 20px;
 }
 */
 
