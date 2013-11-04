@@ -160,7 +160,7 @@ def get_events(name):
     return rooms.get_event(name)
 
 @bottle.post('/insert_event')
-def new_insert():
+def insert():
     items = bottle.request.forms.items()
     event = to_dict(items)
     logging.info("Preparing to inserting event %s", event)
@@ -190,6 +190,7 @@ def new_insert():
         event['num'] += 1
     rooms.insert_event(event['room'], events)
     logging.info("Event corretly inserted.")
+    return "true"
 
 @bottle.post('/update_event')
 def update_event():

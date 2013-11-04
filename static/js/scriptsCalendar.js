@@ -35,7 +35,7 @@ $(document).ready(function() {
 		   'Giovedi', 'Venerdi', 'Sabato', 'Domenica'],
 	dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mer',
 			'Gio', 'Ven', 'Sab', 'Dom'],
-	Timeformat: 'HH:mm{ - HH:mm}',
+	timeFormat: 'H:mm{ - H:mm}',
 	columnFormat: {
 	    month: 'ddd',    // Lun
 	    week: 'ddd d', // Lun 31

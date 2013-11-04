@@ -81,3 +81,8 @@
 2013-11-04 10:34:30,743 Removing all occurences of event {'scope': 'all', 'repeat': 'week', 'num': 2, 'id': 'cmeregalli1383557661433XYRNWH', 'room': 'INNOVATION 360'}
 2013-11-04 12:24:31,224 Started.
 2013-11-04 12:24:31,315 Started.
+2013-11-04 15:02:39,897 Started.
+2013-11-04 15:02:39,983 Started.
+2013-11-04 15:02:50,012 Test user submitted: acolmegna
+2013-11-04 15:03:08,885 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 11, 5, 12, 0), 'room': 'CUSTOMER FIRST', 'title': 'prova', 'until': 'T23:59:59', 'start': datetime.datetime(2013, 11, 5, 10, 30), 'num': 0, 'user': 'acolmegna', 'id': 'acolmegna1383573788865JTYJKI', 'repeat': 'never'}
+2013-11-04 15:03:08,886 Event corretly inserted.
