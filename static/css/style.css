@@ -37,12 +37,6 @@ code {
   height: 60px;
   background-color: #f5f5f5;
 }
-/* Rooms images */
-#TRUST {
-	background: url(/images/trust.png) no-repeat left center;
-	height: 20px;
-}
-*/
 
 /* Form.signin styles
    http://getbootstrap.com/examples/signin/

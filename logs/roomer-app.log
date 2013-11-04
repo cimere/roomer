@@ -57,3 +57,27 @@
 2013-11-03 16:24:21,727 Removing only occurence number 18 from event {'scope': 'onlyThis', 'repeat': 'day', 'num': 18, 'id': 'cmeregalli1383492221395SKEKEI', 'room': 'TRUST'}
 2013-11-03 16:24:24,772 Removing all occurences of event {'scope': 'all', 'repeat': 'day', 'num': 2, 'id': 'cmeregalli1383492221395SKEKEI', 'room': 'TRUST'}
 2013-11-03 16:24:27,499 Removing all occurences of event {'scope': 'all', 'repeat': 'week', 'num': 2, 'id': 'cmeregalli1383492243683CPVBYP', 'room': 'TRUST'}
+2013-11-04 10:06:54,711 Started.
+2013-11-04 10:06:54,813 Started.
+2013-11-04 10:14:20,199 Started.
+2013-11-04 10:14:20,305 Started.
+2013-11-04 10:32:29,356 Started.
+2013-11-04 10:32:29,457 Started.
+2013-11-04 10:32:33,290 Can't identify user...redirecting to signup
+2013-11-04 10:32:47,240 Test user submitted: cmeregalli
+2013-11-04 10:33:06,885 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 11, 5, 12, 0), 'room': 'CUSTOMER FIRST', 'title': 'prova', 'until': '2013-11-12T23:59:59', 'start': datetime.datetime(2013, 11, 5, 10, 30), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383557586864BOPXYR', 'repeat': 'week'}
+2013-11-04 10:33:06,895 No overlapping events found.
+2013-11-04 10:33:06,899 Event corretly inserted.
+2013-11-04 10:33:14,161 Removing all occurences of event {'scope': 'all', 'repeat': 'week', 'num': 0, 'id': 'cmeregalli1383557586864BOPXYR', 'room': 'CUSTOMER FIRST'}
+2013-11-04 10:33:17,856 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 11, 5, 13, 30), 'room': 'CUSTOMER FIRST', 'title': 'prova', 'until': '2013-11-12T23:59:59', 'start': datetime.datetime(2013, 11, 5, 12, 30), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383557597841PGFSPY', 'repeat': 'day'}
+2013-11-04 10:33:17,862 No overlapping events found.
+2013-11-04 10:33:17,867 Event corretly inserted.
+2013-11-04 10:33:24,142 Removing only occurence number 1 from event {'scope': 'onlyThis', 'repeat': 'day', 'num': 1, 'id': 'cmeregalli1383557597841PGFSPY', 'room': 'CUSTOMER FIRST'}
+2013-11-04 10:33:26,655 Removing only occurence number 3 from event {'scope': 'onlyThis', 'repeat': 'day', 'num': 3, 'id': 'cmeregalli1383557597841PGFSPY', 'room': 'CUSTOMER FIRST'}
+2013-11-04 10:33:35,569 Removing all occurences of event {'scope': 'all', 'repeat': 'day', 'num': 0, 'id': 'cmeregalli1383557597841PGFSPY', 'room': 'CUSTOMER FIRST'}
+2013-11-04 10:34:21,450 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 11, 5, 13, 0), 'room': 'INNOVATION 360', 'title': '123', 'until': '2013-11-22T23:59:59', 'start': datetime.datetime(2013, 11, 5, 12, 0), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383557661433XYRNWH', 'repeat': 'week'}
+2013-11-04 10:34:21,454 No overlapping events found.
+2013-11-04 10:34:21,458 Event corretly inserted.
+2013-11-04 10:34:30,743 Removing all occurences of event {'scope': 'all', 'repeat': 'week', 'num': 2, 'id': 'cmeregalli1383557661433XYRNWH', 'room': 'INNOVATION 360'}
+2013-11-04 12:24:31,224 Started.
+2013-11-04 12:24:31,315 Started.
