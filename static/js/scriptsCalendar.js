@@ -125,13 +125,10 @@ $(document).ready(function() {
 		    title: dialog_title
 		})
 	    } else {
-
-		console.log("utente non valido");
+		// 
 	    }
         },
         eventResize: function(calEvent, dayDelta, minuteDelta, revertFunc) {
-            // console.log('user is resizing event '+calEvent.id);
-            // console.log('start: '+calEvent.start+'\nend: '+calEvent.end);
             if ((isOverlapping(calEvent)) || (calEvent.repeat != "never") || (calEvent.user != user)) {
                 revertFunc();
             } else {
@@ -179,7 +176,6 @@ $(document).ready(function() {
 				     num: calEvent.num},
 		   function() {
 		       calendar.fullCalendar( 'refetchEvents' );
-                       console.log(user + " removed event " + id);
 		   }
 		  );
 	}
@@ -213,10 +209,8 @@ $(document).ready(function() {
         var array = calendar.fullCalendar('clientEvents');
         for(i in array){
             if (event.id == array[i].id) {
-                // console.log('no op');
             } else {
                 if (event.end > array[i].start && event.start < array[i].end) {
-                    // console.log('Overlap = TRUE \nstart: '+array[i].start+'\nend: '+array[i].end)
                     return true;
                 }
             }
@@ -285,7 +279,6 @@ $(document).ready(function() {
 		   scope: scope
                }, 
                function() {
-		   console.log(user + " modified event id " + calEvent.id);
                    calendar.fullCalendar( 'refetchEvents' );
                }
 	      );
@@ -297,7 +290,6 @@ $(document).ready(function() {
 	var event_id = createID(user)
 	var until = $('#until').val();
 	repeatLogic();        
-	console.log(user+" is inserting a new event called "+title+" recursive "+repeat+" until "+until);	
 	$.post('/insert_event', 
                {
                    id: event_id,
@@ -312,7 +304,6 @@ $(document).ready(function() {
 		   num: 0
                }, 
                function() {
-		   console.log(user + " created event id " + event_id);
                    calendar.fullCalendar( 'refetchEvents' );
                }
               );

@@ -86,3 +86,17 @@
 2013-11-04 15:02:50,012 Test user submitted: acolmegna
 2013-11-04 15:03:08,885 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 11, 5, 12, 0), 'room': 'CUSTOMER FIRST', 'title': 'prova', 'until': 'T23:59:59', 'start': datetime.datetime(2013, 11, 5, 10, 30), 'num': 0, 'user': 'acolmegna', 'id': 'acolmegna1383573788865JTYJKI', 'repeat': 'never'}
 2013-11-04 15:03:08,886 Event corretly inserted.
+2013-11-05 10:35:32,715 Started.
+2013-11-05 10:35:32,866 Started.
+2013-11-05 10:35:57,547 Welcome: can't identify user...redirecting to signup
+2013-11-05 10:36:04,667 Test user submitted: cmeregalli
+2013-11-05 10:46:53,200 Preparing to inserting event {'allDay': False, 'end': datetime.datetime(2013, 11, 6, 14, 0), 'room': 'CUSTOMER FIRST', 'title': 'prova', 'until': 'T23:59:59', 'start': datetime.datetime(2013, 11, 6, 13, 0), 'num': 0, 'user': 'cmeregalli', 'id': 'cmeregalli1383644813192ICNPGA', 'repeat': 'never'}
+2013-11-05 10:46:53,268 Event corretly inserted.
+2013-11-05 10:46:56,370 Updating event {'allDay': False, 'end': datetime.datetime(2013, 11, 6, 14, 0), 'room': 'CUSTOMER FIRST', 'title': 'prova1', 'until': '0', 'start': datetime.datetime(2013, 11, 6, 13, 0), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383644813192ICNPGA', 'repeat': 'never'}
+2013-11-05 10:47:28,397 Updating event {'allDay': False, 'end': datetime.datetime(2013, 11, 6, 14, 0), 'room': 'CUSTOMER FIRST', 'title': 'prova11', 'until': '0', 'start': datetime.datetime(2013, 11, 6, 13, 0), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383644813192ICNPGA', 'repeat': 'never'}
+2013-11-05 10:47:32,752 Updating event {'allDay': False, 'end': datetime.datetime(2013, 11, 7, 14, 0), 'room': 'CUSTOMER FIRST', 'title': 'prova11', 'until': '0', 'start': datetime.datetime(2013, 11, 7, 13, 0), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383644813192ICNPGA', 'repeat': 'never'}
+2013-11-05 10:47:34,355 Updating event {'allDay': False, 'end': datetime.datetime(2013, 11, 7, 15, 30), 'room': 'CUSTOMER FIRST', 'title': 'prova11', 'until': '0', 'start': datetime.datetime(2013, 11, 7, 14, 30), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383644813192ICNPGA', 'repeat': 'never'}
+2013-11-05 10:47:35,471 Updating event {'allDay': False, 'end': datetime.datetime(2013, 11, 6, 16, 30), 'room': 'CUSTOMER FIRST', 'title': 'prova11', 'until': '0', 'start': datetime.datetime(2013, 11, 6, 15, 30), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383644813192ICNPGA', 'repeat': 'never'}
+2013-11-05 10:47:38,386 Updating event {'allDay': False, 'end': datetime.datetime(2013, 11, 6, 14, 0), 'room': 'CUSTOMER FIRST', 'title': 'prova11', 'until': '0', 'start': datetime.datetime(2013, 11, 6, 13, 0), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383644813192ICNPGA', 'repeat': 'never'}
+2013-11-05 10:47:40,457 Updating event {'allDay': False, 'end': datetime.datetime(2013, 11, 6, 14, 0), 'room': 'CUSTOMER FIRST', 'title': 'prova111', 'until': '0', 'start': datetime.datetime(2013, 11, 6, 13, 0), 'num': 0, 'user': 'cmeregalli', 'scope': 'onlyThis', 'id': 'cmeregalli1383644813192ICNPGA', 'repeat': 'never'}
+2013-11-05 10:47:43,800 Removing only occurence number 0 from event {'scope': 'onlyThis', 'repeat': 'never', 'num': 0, 'id': 'cmeregalli1383644813192ICNPGA', 'room': 'CUSTOMER FIRST'}
