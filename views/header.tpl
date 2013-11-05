@@ -12,9 +12,9 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/">Home</a></li>
+        <li id="Home"><a href="/">Home</a></li>
         %for room in rooms:
-        <li><a href="/room/{{room}}">{{room}}</a></li>
+        <li id="{{room}}"><a href="/room/{{room}}">{{room}}</a></li>
         %end
       </ul>
     </div><!--/.nav-collapse -->

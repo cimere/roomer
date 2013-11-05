@@ -19,8 +19,9 @@ $(document).ready(function() {
     });
 
     $( "#radioDiv" ).click( repeatLogic );
-
-    var room_name = $('span.room_name').text()
+    
+    var room_name = $('span.room_name').text();
+    $(document.getElementById(room_name)).addClass("active");
     var user = $('span.user').text();
 
     var calendar = $('#calendar').fullCalendar({
