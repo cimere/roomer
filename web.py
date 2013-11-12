@@ -62,8 +62,11 @@ def home():
         logging.info("Welcome: can't identify user...redirecting to signup")
         bottle.redirect("/login")
     else:
+        rooms_data = []
         user_data = users.get_user(username)
-        rooms_data = rooms.get_rooms()
+        raw_rooms_data = rooms.get_rooms()
+        for room in raw_rooms_data:
+            rooms_data.append(format_room_data(room))
         logging.info("Welcome:", username)
         return bottle.template('home', dict(user = user_data,
                                             rooms=rooms_data))
@@ -136,12 +139,12 @@ def get_room(name):
         logging.info("Can't identify user...redirecting to signup")
         bottle.redirect("/login")
     else:
-        room_data = rooms.get_room(name)
+        room_data = format_room_data(rooms.get_room(name))
         user_data = users.get_user(username)
         rooms_names = rooms.get_rooms()
         return bottle.template('room', dict(user=user_data,
-                                            room_data=room_data,
-                                            rooms_names=rooms_names))
+                                room_data=room_data,
+                                rooms_names=rooms_names))
 
 @bottle.get('/user/<id>')
 def get_user(id):
@@ -263,6 +266,20 @@ def to_dict(items):
     if 'allDay' in d.keys():
         d['allDay'] = eval(string.capitalize(d['allDay']))
     return d
+
+def format_room_data(data):
+    ''' list of dict --> list of dict
+        in dict: {'tel', 'name', 'people', 'whiteboard', 'vdc', 'type': 'desc'}
+        out dict: {'name', 'desc'}
+    '''
+    output = []
+    desc = "Fino a "+str(data['people'])+" persone, "+data['whiteboard']+"."
+    if data['tel'] is not None:
+        desc += " Interno: "+str(data['tel'])+"."
+    if data['vdc'] is not None:
+        desc += " VDC: "+data['vdc']+". "
+    return {"name": data["name"], "desc": desc}
+
 
 def is_overlapping():
 

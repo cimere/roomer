@@ -15,7 +15,7 @@
     <!-- Begin page content -->
     <div class="container">
       <span class="user" style="display: none">{{user['_id']}}</span>
-      <h2>Ciao {{user['firstname']}}, prenota <span class="room_name">{{room_data['name']}}</span></h2>{{room_data['desc']}} Interno:{{room_data['tel']}}<br />
+      <h2>Ciao {{user['firstname']}}, prenota <span class="room_name">{{room_data['name']}}</span></h2>{{room_data['desc']}}<br />
       <div id='calendar'></div>
       <div id="dialog-insert" title="Inserisci evento" style="display: none" >
     	  <label for="event-title">Titolo </label>
