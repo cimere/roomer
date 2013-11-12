@@ -1,6 +1,3 @@
-
-
-
 // TODO:
 // 1. use UNIX time: DONE
 // 2. check overlapping on all day: DONE
@@ -81,7 +78,6 @@ $(document).ready(function() {
 		calendar.fullCalendar( 'changeView', 'agendaWeek' );
 		return;
 	    }
-            // TODO: repeating events
             // Create a dummy even Object to check overlapping events
             var dummyEvent = new Object();
             dummyEvent.start = start;
@@ -162,6 +158,43 @@ $(document).ready(function() {
 
     })
 
+    enableSmartLinks(calendar);
+
+    // moving on start date
+    var start_unix = getParameterByName('start');
+    if (start_unix == '') {
+	var start_date = new Date();
+    } else {
+	var start_date = $.fullCalendar.parseDate( start_unix );
+    }
+    console.log( start_date );
+    calendar.fullCalendar('gotoDate', start_date);
+    
+
+    // Helper functions
+
+    // smart links (open new calendar view on current calendar date)
+    function enableSmartLinks( calendar ) {
+	$("li > a").each(function( index ) {
+	    var parent_id = $( this ).parent().get( 0 ).id;
+	    if (parent_id != "Home") {
+	    	$( this ).click( function() {
+		    var currentDate = calendar.fullCalendar( 'getDate' );
+		    var currentDateInt = Date.parse(currentDate)/1000
+		    $(this).attr('href', parent_id+"?start="+currentDateInt);
+		})
+	    }
+	})
+    }
+
+    // grab query string paramater
+    // http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values
+    function getParameterByName(name) {
+	name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+	return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
     // Buttons
 
     function addRemoveButton(buttons, calEvent) {
@@ -195,7 +228,6 @@ $(document).ready(function() {
 	}
     }
 
-    // Helper functions
 
     // Avoid overlapping
     // http://code.google.com/p/fullcalendar/issues/detail?id=396

@@ -26,7 +26,7 @@
 	    <div class="row">
 	      <br />
 	      <div class="col-md-2"><a href="\room\{{room['name']}}"><img src="/images/{{room['name']}}.png" /></a></div>
-	      <div class="col-md-8">{{room['desc']}} Interno: {{room['tel']}}</div>
+	      <div class="col-md-8">{{room['desc']}} Interno: {{room['tel']}}  VDC: {{room['vdc']}}</div>
 	    </div> <!-- /row -->  
 	  </li>
 	  %end
