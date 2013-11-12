@@ -95,6 +95,7 @@ def present_test_login():
         bottle.redirect("/")
 
 @bottle.post('/test')
+@bottle.post('/login')
 def process_login():
     
     username = bottle.request.forms.get("username")
