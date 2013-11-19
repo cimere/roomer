@@ -50,6 +50,12 @@ class RoomDAO:
                 pass
             else:
                 event['until'] = event['until'].isoformat()
+            if event['repeat'] != 'never':
+                event['backgroundColor'] = "#B061FF"
+                event['borderColor'] = "#A54BFF"
+            else:
+                event['backgroundColor'] = "#6AA4C1"
+                event['borderColor'] = "#3A87AD"
         return json.dumps(events["reservations"], default=json_util.default) # TODO: move json dumps in web.py? If it returns an array do I still need to perform json parse?
 
     def insert_event(self, room, events):
