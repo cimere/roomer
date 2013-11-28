@@ -16,7 +16,10 @@
       <h2>Ciao {{user['firstname']}}</h2>
       <div>
         <h4>Scegli una stanza da prenotare.</br></h4>
-        <em>Hint: puoi sceglierla anche dalla barra di navigazione in alto.</em>
+      </div>
+      <div class="alert alert-warning">
+	Suggeriamo di utilizzare l'indirizzo <a href="http://roomer" >http://roomer</a>.
+	Una volta cliccato il link salvate il nuovo indirizzo tra i preferiti con CTRL+D.
       </div>
       <br />
       <div class="well">

@@ -51,8 +51,8 @@ class RoomDAO:
             else:
                 event['until'] = event['until'].isoformat()
             if event['repeat'] != 'never':
-                event['backgroundColor'] = "#B061FF"
-                event['borderColor'] = "#A54BFF"
+                event['backgroundColor'] = "#94ce8e"
+                event['borderColor'] = "#66c65b"
             else:
                 event['backgroundColor'] = "#6AA4C1"
                 event['borderColor'] = "#3A87AD"
