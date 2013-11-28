@@ -78,8 +78,9 @@ def present_login():
     username = get_session_username()
 
     if username is None:
-        return bottle.template("login",
-                               dict(username="", login_error=""))
+        # return bottle.template("login",
+        #                        dict(username="", login_error=""))
+        bottle.redirect("http://roomer")
     else:
         bottle.redirect("/")
 
