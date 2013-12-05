@@ -29,6 +29,10 @@ import sessionDAO
 # Logging
 app_root = os.path.dirname(__file__)
 log_file = 'logs/roomer-app.log'
+# create file if it doesn't exist
+if not os.path.exists(log_file):
+    f = file(log_file, 'w')
+    f.close()
 logging.basicConfig(format='%(asctime)s %(message)s',
                     filename=log_file,
                     level=logging.INFO)
@@ -67,7 +71,7 @@ def home():
         raw_rooms_data = rooms.get_rooms()
         for room in raw_rooms_data:
             rooms_data.append(format_room_data(room))
-        logging.info("Welcome:", username)
+        logging.info("Welcome: %s", username)
         return bottle.template('home', dict(user = user_data,
                                             rooms=rooms_data))
 

@@ -323,14 +323,6 @@ $(document).ready(function() {
 	var event_id = createID(user)
 	var until = $('#until').val();
 	repeatLogic();        
-	if (repeat == 'never') {
-	    var backgroundColor = "#6AA4C1";
-	    var borderColor = "#3A87AD";
-
-	} else {
-	    var backgroundColor = "#E41359";
-	    var borderColor = "#930A38";
-	}
 	$.post('/insert_event', 
                {
                    id: event_id,
@@ -342,9 +334,7 @@ $(document).ready(function() {
                    allDay: allDay,
 		   repeat: repeat,
 		   until: until + "T23:59:59",
-		   num: 0,
-		   backgroundColor: backgroundColor,
-		   borderColor: borderColor
+		   num: 0
                }, 
                function() {
                    calendar.fullCalendar( 'refetchEvents' );
