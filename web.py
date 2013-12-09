@@ -333,4 +333,4 @@ sessions = sessionDAO.SessionDAO(database)
 
 port = os.environ.get('PORT', '8080')
 bottle.debug(True)
-bottle.run(host='0.0.0.0', port=port, reloader=True) 
+bottle.run(host='0.0.0.0', port=8080, reloader=True, server='cherrypy')
