@@ -123,4 +123,24 @@ class RoomDAO:
         
         return cursor['result']
 
-                
+    def get_reservations_by_user(self, user):
+        """
+        Return all the reservations for a given user.
+        """
+        now = datetime.datetime.now()
+        delta = datetime.timedelta(days=7)
+        pipeline = [
+            {"$unwind": "$reservations"},
+            {"$match": {"reservations.user": user,
+                        "reservations.start": {"$gte": now, "$lte": now+delta}}},
+            {"$project": { "_id": 0, "name": 1,
+                           "reservations.start": 1, "reservations.end": 1,
+                           "reservations.until": 1, "reservations.title": 1}},
+            {"$sort": {"reservations.start": 1}}
+        ]
+        try:
+            cursor = self.rooms.aggregate(pipeline)
+        except:
+            print "Unable to query database."
+        print cursor
+        return cursor['result']

@@ -25,39 +25,48 @@ import logging
 import userDAO
 import roomDAO
 import sessionDAO
+import locale
 
-# Logging
-app_root = os.path.dirname(__file__)
-log_file = 'logs/roomer-app.log'
+APP_ROOT = os.path.dirname(__file__)
+locale.setlocale(locale.LC_TIME, 'it_IT.utf8')
+ 
+# Logging 
+LOG_DIR = 'logs'
+LOG_FILE = 'roomer-app.log'
+LOG_PATH = os.path.join(APP_ROOT, LOG_DIR, LOG_FILE)
+
 # create file if it doesn't exist
-if not os.path.exists(log_file):
-    f = file(log_file, 'w')
+if not os.path.exists(LOG_PATH):
+    f = file(LOG_PATH, 'w')
     f.close()
 logging.basicConfig(format='%(asctime)s %(message)s',
-                    filename=log_file,
+                    filename=LOG_PATH,
                     level=logging.INFO)
 logging.info('Started.')
+# End Logging
 
+app = bottle.Bottle()
+         
 # Static files
-@bottle.get('/<filename:re:.*\.js>')
+@app.get('/<filename:re:.*\.js>')
 def javascripts(filename):
     return bottle.static_file(filename, root='static/js')
 
-@bottle.get('/<filename:re:.*\.css>')
+@app.get('/<filename:re:.*\.css>')
 def stylesheets(filename):
     return bottle.static_file(filename, root='static/css')
 
-@bottle.get('/images/<filename:re:.*\.(jpg|png|gif|ico)>')
+@app.get('/images/<filename:re:.*\.(jpg|png|gif|ico)>')
 def images(filename):
     return bottle.static_file(filename, root='static/css/images')
 
-@bottle.get('/<filename:re:.*\.(eot|ttf|woff|svg)>')
+@app.get('/<filename:re:.*\.(eot|ttf|woff|svg)>')
 def fonts(filename):
     return bottle.static_file(filename, root='static/fonts')
 
 # Route definitions
 
-@bottle.route('/')
+@app.route('/')
 def home():
 
     username = get_session_username()
@@ -69,14 +78,23 @@ def home():
         rooms_data = []
         user_data = users.get_user(username)
         raw_rooms_data = rooms.get_rooms()
+        user_reservations = rooms.get_reservations_by_user(username)
+        reservations = []
+        for res in user_reservations:
+            res['reservations']['day'] = res['reservations']['start'].strftime("%A %d")
+            res['reservations']['start'] = res['reservations']['start'].strftime("%H:%M")
+            res['reservations']['end'] = res['reservations']['end'].strftime("%H:%M")
+            reservations.append(res)
         for room in raw_rooms_data:
             rooms_data.append(format_room_data(room))
         logging.info("Welcome: %s", username)
-        return bottle.template('home', dict(user = user_data,
-                                            rooms=rooms_data))
+        return bottle.template('home',
+                               dict(user = user_data,
+                                    rooms=rooms_data,
+                                    reservations=reservations))
 
 # displays the initial blog login form
-@bottle.get('/login')
+@app.get('/login')
 def present_login():
 
     username = get_session_username()
@@ -88,9 +106,10 @@ def present_login():
     else:
         bottle.redirect("/")
 
-@bottle.get('/test')
+@app.get('/test')
 def present_test_login():
 
+    print 'sono qui'
     username = get_session_username()
 
     if username is None:
@@ -99,8 +118,8 @@ def present_test_login():
     else:
         bottle.redirect("/")
 
-@bottle.post('/test')
-@bottle.post('/login')
+@app.post('/test')
+@app.post('/login')
 def process_login():
     
     username = bottle.request.forms.get("username")
@@ -128,7 +147,7 @@ def process_login():
                                dict(username=cgi.escape(username),
                                     login_error="Utente non valido."))
 
-@bottle.get('/logout')
+@app.get('/logout')
 def process_logout():
 
     cookie = bottle.request.get_cookie("session")
@@ -136,7 +155,7 @@ def process_logout():
     bottle.response.set_cookie("session", "")
     bottle.redirect("login")
 
-@bottle.get('/room/<name>')
+@app.get('/room/<name>')
 def get_room(name):
 
     username = get_session_username()  # see if user is logged in
@@ -152,23 +171,23 @@ def get_room(name):
                                 room_data=room_data,
                                 rooms_names=rooms_names))
 
-@bottle.get('/user/<id>')
+@app.get('/user/<id>')
 def get_user(id):
 
     user = users.get_user(id)
     return bottle.template('user', user=user)
 
-@bottle.get('/get_user_ids')
+@app.get('/get_user_ids')
 def get_user_ids():
     # TODO: serve realmente?
     return users.get_user_ids()
 
-@bottle.get('/get_events/<name>')
+@app.get('/get_events/<name>')
 def get_events(name):
 
     return rooms.get_event(name)
 
-@bottle.post('/insert_event')
+@app.post('/insert_event')
 def insert():
     items = bottle.request.forms.items()
     event = to_dict(items)
@@ -200,7 +219,7 @@ def insert():
     logging.info("Event corretly inserted.")
     return "true"
 
-@bottle.post('/update_event')
+@app.post('/update_event')
 def update_event():
     ''' Only title update for recursive event
     datetime update for single events'''
@@ -211,7 +230,7 @@ def update_event():
     logging.info("Updating event %s", event)
     rooms.update_event(event['room'], event)
 
-@bottle.post('/remove_event')
+@app.post('/remove_event')
 def remove_event():
 
     items = bottle.request.forms.items()
@@ -317,6 +336,7 @@ def is_overlapping():
             return True            
 
 
+
 if 'MONGOHQ_URL' in os.environ:
     connection_string = os.environ['MONGOHQ_URL']
     connection = pymongo.MongoClient(connection_string)
@@ -329,7 +349,7 @@ else:
 users = userDAO.UserDAO(database)
 rooms = roomDAO.RoomDAO(database)
 sessions = sessionDAO.SessionDAO(database)
-
+    
 port = os.environ.get('PORT', '8080')
-bottle.debug(True)
-bottle.run(host='0.0.0.0', port=8080, reloader=True, server='cherrypy')
+
+bottle.run(app, host='0.0.0.0', port=8080, debug=True, reloader=True)# server='cherrypy')
