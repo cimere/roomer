@@ -46,23 +46,24 @@ logging.info('Started.')
 # End Logging
 
 app = bottle.Bottle()
+bottle.TEMPLATE_PATH.insert(0,os.path.join(APP_ROOT, 'views'))
          
 # Static files
 @app.get('/<filename:re:.*\.js>')
 def javascripts(filename):
-    return bottle.static_file(filename, root='static/js')
+    return bottle.static_file(filename, root=os.path.join(APP_ROOT, 'static/js'))
 
 @app.get('/<filename:re:.*\.css>')
 def stylesheets(filename):
-    return bottle.static_file(filename, root='static/css')
+    return bottle.static_file(filename, root=os.path.join(APP_ROOT, 'static/css'))
 
 @app.get('/images/<filename:re:.*\.(jpg|png|gif|ico)>')
 def images(filename):
-    return bottle.static_file(filename, root='static/css/images')
+    return bottle.static_file(filename, root=os.path.join(APP_ROOT, 'static/css/images'))
 
 @app.get('/<filename:re:.*\.(eot|ttf|woff|svg)>')
 def fonts(filename):
-    return bottle.static_file(filename, root='static/fonts')
+    return bottle.static_file(filename, root=os.path.join(APP_ROOT, 'static/fonts'))
 
 # Route definitions
 
@@ -78,6 +79,7 @@ def home():
         rooms_data = []
         user_data = users.get_user(username)
         raw_rooms_data = rooms.get_rooms()
+        free_slots = get_free_slot(1)
         user_reservations = rooms.get_reservations_by_user(username)
         reservations = []
         for res in user_reservations:
@@ -335,7 +337,8 @@ def is_overlapping():
             logging.info("Overlapping events: %s", repr(overlapping_events))
             return True            
 
-
+def get_free_slot(duration):
+    print rooms.get_free_slots(duration)
 
 if 'MONGOHQ_URL' in os.environ:
     connection_string = os.environ['MONGOHQ_URL']

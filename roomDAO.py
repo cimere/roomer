@@ -142,5 +142,4 @@ class RoomDAO:
             cursor = self.rooms.aggregate(pipeline)
         except:
             print "Unable to query database."
-        print cursor
         return cursor['result']
