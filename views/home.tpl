@@ -42,31 +42,17 @@
 	<div class="panel-body">
 	  <ul class="list-unstyled">
 	    %for room in rooms:
-	    <li>
-	      <div class="row">
-		<br />
-		<div class="col-md-2"><a href="\room\{{room['name']}}"><img src="/images/{{room['name']}}.png" /></a></div>
-		<div class="col-md-8">{{room['desc']}}</div>
-	      </div> <!-- /row -->  
-	    </li>
+	      <a class="btn btn-{{room['name']}}" title="{{room['desc']}}" href="\room\{{room['name']}}">{{room['name']}}</a>
 	    %end
+	      <div class="btn btn-AGILITY" title="{{room['desc']}}">AGILITY</div>
 	  </ul>
 	</div>
       </div>
-      <div class="well">
-	<ul class="list-unstyled">
-	  <li>
-	    <div class="row">
-	      <div class="col-md-2"><img src="/images/AGILITY.png" /></div>
-	      <div class="col-md-8">Corner AGILITY, postazione per 3 persone con tavolino e punti rete (non prenotabile).</div>
-	    </div>
-	  </li>
-	</ul>
-      </div> <!-- /well -->
     </div> <!-- /container -->
   </div>
   
   % include footer
+  <script src="../scripts.js"></script>
 
 </body>
 </html>

@@ -79,7 +79,7 @@ def home():
         rooms_data = []
         user_data = users.get_user(username)
         raw_rooms_data = rooms.get_rooms()
-        free_slots = get_free_slot(1)
+#        free_slots = get_free_slot(1)
         user_reservations = rooms.get_reservations_by_user(username)
         reservations = []
         for res in user_reservations:
@@ -301,9 +301,9 @@ def format_room_data(data):
     output = []
     desc = "Fino a "+str(data['people'])+" persone, "+data['whiteboard']+"."
     if data['tel'] is not None:
-        desc += " Interno: "+str(data['tel'])+"."
+        desc += "Interno: "+str(data['tel'])+"."
     if data['vdc'] is not None:
-        desc += " VDC: "+data['vdc']+". "
+        desc += "VDC: "+data['vdc']+". "
     return {"name": data["name"], "desc": desc}
 
 
@@ -355,4 +355,4 @@ sessions = sessionDAO.SessionDAO(database)
     
 port = os.environ.get('PORT', '8080')
 
-bottle.run(app, host='0.0.0.0', port=port, debug=True, reloader=True)# server='cherrypy')
+bottle.run(app, host='0.0.0.0', port=port, debug=True, reloader=True, server='cherrypy')

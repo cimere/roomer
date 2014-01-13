@@ -31,6 +31,56 @@ code {
   font-size: 80%;
 }
 
+/* Custom button */
+.btn-TRUST {
+    margin: 1em;
+    background-color: #665FA2;
+    color: white;
+}
+.btn-TRUST:hover {
+    background-color: #504b7f;
+    color: white;
+}
+.btn-INITIATIVE {
+    margin: 1em;
+    background-color: #ED7835;
+    color: white;
+}
+.btn-INITIATIVE:hover {
+    background-color: #bf5e2a;
+    color: white;
+}
+.btn-CUSTOMER {
+    margin: 1em;
+    background-color: #E41359;
+    color: white;
+}
+.btn-CUSTOMER:hover {
+    margin: 1em;
+    background-color: #c4114d;
+    color: white;
+}
+.btn-INNOVATION {
+    margin: 1em;
+    background-color: #49A828;
+    color: white;
+}
+.btn-INNOVATION:hover {
+    background-color: #3b8720;
+    color: white;
+}
+.btn-AGILITY {
+    margin: 1em;
+    background-color: #55B9A8;
+    color: white;
+}
+.btn-AGILITY:hover {
+    background-color: #55B9A8;
+    color: white;
+}
+
+
+
 /* Sticky footer styles
    http://getbootstrap.com/examples/sticky-footer-navbar/sticky-footer-navbar.css
 -------------------------------------------------- */
