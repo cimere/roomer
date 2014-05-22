@@ -28,7 +28,7 @@ import sessionDAO
 import locale
 
 APP_ROOT = os.path.dirname(__file__)
-locale.setlocale(locale.LC_TIME, 'it_IT.utf8')
+# locale.setlocale(locale.LC_TIME, 'it_IT.utf8')
  
 # Logging 
 LOG_DIR = 'logs'

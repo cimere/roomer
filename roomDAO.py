@@ -132,7 +132,9 @@ class RoomDAO:
         pipeline = [
             {"$unwind": "$reservations"},
             {"$match": {"reservations.user": user,
-                        "reservations.start": {"$gte": now, "$lte": now+delta}}},
+                        "reservations.start": {"$lte": now+delta},
+                        "reservations.end": {"$gte": now}
+                    }},
             {"$project": { "_id": 0, "name": 1,
                            "reservations.start": 1, "reservations.end": 1,
                            "reservations.until": 1, "reservations.title": 1}},
