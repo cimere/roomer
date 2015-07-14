@@ -2,7 +2,7 @@
   <div class="container">
   	<div class="row">
 	  <div class="col-xs-12 col-md-8">
-	  	<p class="text-muted credit">Written by <a href="mailto:ciro.meregalli@fastweb.it?Subject=Reserve.me" target="_top">cmeregalli</a> &copy 2013</p>  
+	  	<p class="text-muted credit">Written with &hearts; - v.1.2</p>
 	  </div>
 	</div>
   </div>

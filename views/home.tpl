@@ -26,7 +26,7 @@
 	  %else:
 	  %for reservation in  reservations:
 	  <div class="btn">
-	    <a class="btn btn-primary" href="\room\{{ reservation['name']}}">
+	    <a class="btn btn-primary" href="/room/{{ reservation['name']}}">
 	      {{ reservation['reservations']['day'] }}<br />
 	      {{ reservation['reservations']['start'] }} - {{ reservation['reservations']['end'] }}<br />
 	      {{ reservation['name'] }}<br />
@@ -41,10 +41,17 @@
 	<div class="panel-heading">Scegli una stanza da prenotare.</div>
 	<div class="panel-body">
 	  <ul class="list-unstyled">
+	    %if rooms == []:
+	    <p>Whooops! {{user['firstname']}}, non puoi prenotare stanze. :(</p>
+	    <p>Contatta l'amministratore di roomer per risolvere il problema.</p>
+	    %else:
 	    %for room in rooms:
-	      <a class="btn btn-{{room['name']}}" title="{{room['desc']}}" href="\room\{{room['name']}}">{{room['name']}}</a>
+	    %if room['bookable'] == True:
+	    <a class="btn btn-{{room['name']}}" title="{{room['desc']}}" href="/room/{{room['name']}}">{{room['name']}}</a>
+	    %else:
+	    <div class="btn btn-{{room['name']}} noClick" title="{{room['desc']}}">{{room['name']}}</div>
 	    %end
-	      <div class="btn btn-AGILITY" title="{{room['desc']}}">AGILITY</div>
+	    %end
 	  </ul>
 	</div>
       </div>

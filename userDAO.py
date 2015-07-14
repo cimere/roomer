@@ -16,10 +16,8 @@
 #
 
 
-import pymongo
-
-
-# The User Data Access Object handles all interactions with the User collection.
+# The User Data Access Object handles all interactions with
+# the User collection.
 class UserDAO:
 
     def __init__(self, db):
@@ -28,40 +26,38 @@ class UserDAO:
         # self.SECRET = 'verysecret'
 
     def get_user_ids(self):
-
+        """
+        Return all users ids.
+        """
         users = {'username': []}
-
         try:
             cursor = self.users.find()
         except:
             print "Unable to query database for user"
-
         for doc in cursor:
             users['username'].append(doc['_id'])
-
         return users
 
     def get_user(self, id):
-
+        """
+        Given a user id, return the user document.
+        """
         try:
             user = self.users.find_one({"_id": id})
         except:
             print "Unable to query database for user"
-
         return user
 
-    # Validates a user login. Returns user record or None
     def validate_login(self, username):
-
+        """
+        Validate a user login. Return user record or None.
+        """
         user = None
         try:
             user = self.users.find_one({'_id': username})
         except:
             print "Unable to query database for user"
-
         if user is None:
             print "User not in database"
             return None
-
-        # Looks good
         return user

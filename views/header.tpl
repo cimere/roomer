@@ -14,7 +14,9 @@
       <ul class="nav navbar-nav">
         <li id="Home"><a href="/">Home</a></li>
         %for room in rooms:
-        <li id="{{room}}"><a href="/room/{{room}}">{{room}}</a></li>
+          %if room != "AGILITY":
+            <li id="{{room}}"><a href="/room/{{room}}">{{room}}</a></li>
+          %end
         %end
       </ul>
     </div><!--/.nav-collapse -->

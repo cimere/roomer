@@ -7,7 +7,6 @@ body {
 /* Custom navbar */
 .navbar-default {
 background-color: #fff;
-background: #fff url("http://agora/images/theme/bg_menutop.png") bottom center repeat-x;
 }
 .navbar-default .navbar-nav>.active>a{
 color: #555;
@@ -77,6 +76,38 @@ code {
 .btn-AGILITY:hover {
     background-color: #55B9A8;
     color: white;
+}
+
+.btn-FUMAGALLI {
+    margin: 1em;
+    background-color: #665FA2;
+    color: white;
+}
+.btn-FUMAGALLI:hover {
+    background-color: #504b7f;
+    color: white;
+}
+.btn-MARCONI {
+    margin: 1em;
+    background-color: #ED7835;
+    color: white;
+}
+.btn-MARCONI:hover {
+    background-color: #bf5e2a;
+    color: white;
+}
+.btn-MEUCCI {
+    margin: 1em;
+    background-color: #49A828;
+    color: white;
+}
+.btn-MEUCCI:hover {
+    background-color: #3b8720;
+    color: white;
+}
+/*	cursor: default; */
+.noClick:hover {
+    cursor: default;
 }
 
 
