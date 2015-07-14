@@ -35,11 +35,10 @@ class SessionDAO:
 
         session_id = self.get_random_str(32)
         session = {'username': username, '_id': session_id}
-
         try:
-            self.sessions.insert(session, safe=True)
+            self.sessions.insert_one(session)
         except:
-            print "Unexpected error on start_session:", sys.exc_info()[0]
+            print "Unexpected error on start_session:", sys.exc_info()#[0]
             return None
 
         return str(session['_id'])
