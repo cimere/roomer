@@ -21,7 +21,8 @@ import random
 import string
 
 
-# The session Data Access Object handles interactions with the sessions collection
+# The session Data Access Object handles interactions with the sessions
+# collection.
 
 class SessionDAO:
 
@@ -29,8 +30,8 @@ class SessionDAO:
         self.db = database
         self.sessions = database.sessions
 
-    # will start a new session id by adding a new document to the sessions collection
-    # returns the sessionID or None
+    # will start a new session id by adding a new document to the sessions
+    # collection and returns the sessionID or None
     def start_session(self, username):
 
         session_id = self.get_random_str(32)
@@ -38,7 +39,7 @@ class SessionDAO:
         try:
             self.sessions.insert_one(session)
         except:
-            print "Unexpected error on start_session:", sys.exc_info()#[0]
+            print "Unexpected error on start_session:", sys.exc_info()[0]
             return None
 
         return str(session['_id'])
@@ -63,7 +64,8 @@ class SessionDAO:
 
         return session
 
-    # get the username of the current session, or None if the session is not valid
+    # get the username of the current session, or None if the session is not
+    # valid
     def get_username(self, session_id):
 
         session = self.get_session(session_id)
