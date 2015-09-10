@@ -15,18 +15,17 @@
 #
 
 import datetime
-import time
 import bottle
 import os
 import pymongo
 import cgi
-import string
 import logging
 import userDAO
 import roomDAO
 import sessionDAO
 import groupDAO
-# import locale
+import utils
+
 
 APP_ROOT = os.path.dirname(__file__)
 # locale.setlocale(locale.LC_TIME, 'it_IT.utf8')
@@ -93,12 +92,12 @@ def home():
         user_reservations = rooms.get_reservations_by_user(username)
         reservations = []
         for res in user_reservations:
-            res['reservations']['day'] = get_reservation_day(res)
-            res['reservations']['start'] = get_reservation_start(res)
-            res['reservations']['end'] = get_reservation_end(res)
+            res['reservations']['day'] = utils.get_reservation_day(res)
+            res['reservations']['start'] = utils.get_reservation_start(res)
+            res['reservations']['end'] = utils.get_reservation_end(res)
             reservations.append(res)
         for room in raw_rooms_data:
-            rooms_data.append(format_room_data(room))
+            rooms_data.append(utils.format_room_data(room))
         logging.info("Welcome: %s", username)
         return bottle.template('home',
                                dict(user=user_data,
@@ -169,7 +168,7 @@ def get_room(name):
         user_data = users.get_user(username)
         group_rooms = groups.get(user_data['groups'][0])['rooms']
         if unicode(rooms.get_room_id(name)) in group_rooms:
-            room_data = format_room_data(rooms.get_room(name))
+            room_data = utils.format_room_data(rooms.get_room(name))
             rooms_names = rooms.get_rooms(group_rooms)
             return bottle.template('room', dict(user=user_data,
                                                 room_data=room_data,
@@ -197,14 +196,14 @@ def get_events(name):
     start = int(request.query.start)
     end = int(request.query.end)
     return rooms.get_events(name,
-                            epoch_to_iso(start),
-                            epoch_to_iso(end))
+                            utils.epoch_to_iso(start),
+                            utils.epoch_to_iso(end))
 
 
 @app.post('/insert_event')
 def insert():
     items = bottle.request.forms.items()
-    event = to_dict(items)
+    event = utils.to_dict(items)
     logging.info("Preparing to inserting event %s", event)
     # Compute data to manage recursive events
     options = {"never": 0, "day": 1, "week": 7}
@@ -215,8 +214,8 @@ def insert():
         event['until'] = 0
     else:
         # recurring event, check for overlapping
-        event['until'] = str_to_date(event['until'])
-        if is_overlapping():
+        event['until'] = utils.str_to_date(event['until'])
+        if utils.is_overlapping(bottle.request, rooms):
             logging.info("Event not inserted due to overlapping conditions.")
             return False
         else:
@@ -241,7 +240,7 @@ def update_event():
     ''' Only title update for recursive event
     datetime update for single events'''
     items = bottle.request.forms.items()
-    event = to_dict(items)
+    event = utils.to_dict(items)
     if event['scope'] == 'all':
         event['num'] = None
     logging.info("Updating event %s", event)
@@ -252,7 +251,7 @@ def update_event():
 def remove_event():
 
     items = bottle.request.forms.items()
-    event = to_dict(items)
+    event = utils.to_dict(items)
     if event['scope'] == "onlyThis":
         logging.info("Removing only occurence number %s from event %s",
                      event['num'], event)
@@ -262,120 +261,10 @@ def remove_event():
         rooms.remove_event_from_here(event['room'], event['id'], 0)
 
 
-# Helper Functions
-def get_reservation_day(reservation):
-    return reservation['reservations']['start'].strftime("%A %d")
-
-
-def get_reservation_start(reservation):
-    return reservation['reservations']['start'].strftime("%H:%M")
-
-
-def get_reservation_end(reservation):
-    return reservation['reservations']['end'].strftime("%H:%M")
-
-
 def get_session_username():
     cookie = bottle.request.get_cookie("session")
     return sessions.get_username(cookie)
 
-
-def epoch_to_iso(seconds_since_epoch):
-    return datetime.datetime.fromtimestamp(seconds_since_epoch)
-
-
-def ISO_str_to_date(string):
-    #  struct = time.strptime(string, "%a %b %d %Y %H:%M:%S GMT+0200 (CEST)")
-    #  unix = time.mktime(struct)
-    date = datetime.datetime.fromtimestamp(int(string))
-    return date
-
-
-def str_to_date(string):
-    struct = time.strptime(string, "%Y-%m-%dT%H:%M:%S")
-    unix = time.mktime(struct)
-    date = datetime.datetime.fromtimestamp(unix)
-    return date
-
-
-def day_to_date(day_number):
-    '''
-    Takes an integer input (e.g. 4) and returns a date (e.g. 1/4/2013)
-    2013 = current year
-    http://answers.yahoo.com/question/index?qid=20100805222947AAqMKfh
-    '''
-    first_of_year = datetime.datetime(time.localtime().tm_year, 1, 1)
-    first_ordinal = first_of_year.toordinal()
-    day_ordinal = first_ordinal - 1 + day_number
-    return datetime.date.fromordinal(day_ordinal)
-
-
-def to_dict(items):
-    ''' put a bottle.request.forms dict in a standard python dict
-    and do some data type cast to store data in  mongoDB '''
-    d = {}
-    for key, value in items:
-        d[key] = value
-    if 'start' in d.keys():
-        d['start'] = ISO_str_to_date(d['start'])
-    if 'end' in d.keys():
-        d['end'] = ISO_str_to_date(d['end'])
-    if 'num' in d.keys():
-        d['num'] = int(d['num'])
-    if 'allDay' in d.keys():
-        d['allDay'] = eval(string.capitalize(d['allDay']))
-    return d
-
-
-def format_room_data(data):
-    ''' list of dict --> list of dict
-        in dict: {'tel', 'name', 'people', 'whiteboard', 'vdc', 'type': 'desc'}
-        out dict: {'name', 'desc'}
-    '''
-    desc = "Fino a "+str(data['people'])+" persone, "+data['whiteboard']+"."
-    if data['tel'] is not None:
-        desc += "Interno: "+str(data['tel'])+"."
-    if data['vdc'] is not None:
-        desc += "VDC: "+data['vdc']+". "
-    return {"name": data["name"], "desc": desc, "bookable": data["bookable"]}
-
-
-def is_overlapping():
-
-    id = bottle.request.forms.get("id")
-    room = bottle.request.forms.get("room")
-    repeat = bottle.request.forms.get("repeat")
-    start = ISO_str_to_date(bottle.request.forms.get("start"))
-    end = ISO_str_to_date(bottle.request.forms.get("end"))
-    if repeat != "never":
-        # recurring event, check for overlapping
-        until = str_to_date(bottle.request.forms.get("until"))
-        if repeat == "week":
-            # on mongodb week starts on Sunday
-            week_day = start.isoweekday() + 1
-        else:
-            week_day = None
-
-        overlapping = rooms.check_overlapping(room, id, start,
-                                              start.hour, start.minute,
-                                              end.hour, end.minute,
-                                              until, week_day)
-        if overlapping == []:
-            # not overlapping
-            logging.info("No overlapping events found.")
-            return False
-        else:
-            overlapping_events = []
-            for event in overlapping:
-                overlapping_events.append(
-                    day_to_date(event['day']).isoformat())
-            logging.info("Overlapping events: %s", repr(overlapping_events))
-            return True
-
-
-def get_free_slot(duration):
-    # print rooms.get_free_slots(duration)
-    pass
 
 if 'MONGOHQ_URL' in os.environ:
     connection_string = os.environ['MONGOHQ_URL']
