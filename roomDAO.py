@@ -21,9 +21,9 @@ class RoomDAO:
         '''
         try:
             room = self.rooms.find_one({"name": room_name},
-                                       fields={'_id': True})
-        except:
-            print "Unable to query database for user"
+                                       projection={'_id': True})
+        except Exception, e:
+            print "Unable to query database for user", e
         return None if room is None else room['_id']
 
     def get_room(self, name):
@@ -32,7 +32,7 @@ class RoomDAO:
         '''
         try:
             room = self.rooms.find_one({"name": name},
-                                       fields={'reservations': False})
+                                       projection={'reservations': False})
         except:
             print "Unable to query database for user"
         print "get_room returned %s bytes" % sys.getsizeof(room)
@@ -44,7 +44,7 @@ class RoomDAO:
         '''
         rooms = []
         try:
-            cursor = self.rooms.find(fields={'reservations': False}
+            cursor = self.rooms.find(projection={'reservations': False}
                                      ).sort("name", pymongo.ASCENDING)
             for doc in cursor:
                 if str(doc['_id']) in rooms_list:
@@ -67,8 +67,10 @@ class RoomDAO:
                         "reservations.start": {"$gte": start}}}
         ]
         # events = self.db.rooms.find_one(query, projection)
-        cursor = self.rooms.aggregate(pipeline)
-        results = cursor['result']
+        try:
+            results = self.rooms.aggregate(pipeline)
+        except Exception, e:
+            print "Unable to query database for user", e
         if results is None:
             return json.dumps([])
         for res in results:
@@ -89,7 +91,7 @@ class RoomDAO:
                 event['borderColor'] = "#3A87AD"
             events["reservations"].append(event)
         # TODO: move json dumps in web.py? If it returns an array do
-        # Do I still need to perform json parse?
+        # I still need to perform json parse?
         print "get_events returned %s bytes" % sys.getsizeof(events)
         return json.dumps(events["reservations"], default=json_util.default)
 
@@ -194,10 +196,10 @@ class RoomDAO:
                               "sec_e": {"$gt": start_hour*3600 + start_min*60}
                               }})
         try:
-            cursor = self.rooms.aggregate(pipeline)
+            results = self.rooms.aggregate(pipeline)
         except:
             print "Unable to query database for user"
-        return cursor['result']
+        return list(results)
 
     def get_reservations_by_user(self, user):
         """
@@ -219,4 +221,4 @@ class RoomDAO:
             cursor = self.rooms.aggregate(pipeline)
         except:
             print "Unable to query database."
-        return cursor
+        return list(cursor)
