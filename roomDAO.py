@@ -99,8 +99,8 @@ class RoomDAO:
         '''
         Insert an event in a room.
         '''
-        self.db.rooms.update({"name": room},
-                             {"$push": {"reservations": {"$each": events}}})
+        self.db.rooms.update_one({"name": room},
+                                 {"$push": {"reservations": {"$each": events}}})
         # return events["reservations"]
 
     def update_event(self, room, event):
@@ -109,32 +109,30 @@ class RoomDAO:
         '''
         if event['num'] is None:
             # Limitation: update on all events can modify only title.
-            pipeline = [{"$match": {"name": "TRUST"}},
+            pipeline = [{"$match": {"name": event['room']}},
                         {"$unwind": "$reservations"},
                         {"$match": {"reservations.id": event['id']}},
                         {"$group": {"_id": "$reservations.id",
                                     "max_num": {"$max": "$reservations.num"}}}
                         ]
             result = self.db.rooms.aggregate(pipeline)
-            max_num = int(result['result'][0]['max_num'])
-
+            max_num = list(result)['max_num']
             for num in range(max_num):
-                # print num
                 query = {"name": room,
                          "reservations.id": event['id'],
                          "reservations.num": num}
-                self.db.rooms.update(query,
-                                     {"$set":
-                                      {"reservations.$.title":
-                                       event["title"]}
-                                      })
+                self.db.rooms.update_one(query,
+                                         {"$set":
+                                          {"reservations.$.title":
+                                           event["title"]}}
+                                         )
         else:
-            query = {"name": room, "reservations.id": event['id'],
-                     "reservations.num": event['num']}
+            query = {"name": room, "reservations.id": event['id']}
             event = {"$set": {"reservations.$.title": event["title"],
                               "reservations.$.start": event["start"],
-                              "reservations.$.end": event["end"]}}
-            self.db.rooms.update(query, event)
+                              "reservations.$.end": event["end"]}
+                     }
+            self.db.rooms.update_one(query, event)
 
     def remove_event(self, room, id, num):
         '''
@@ -142,18 +140,18 @@ class RoomDAO:
         '''
         if num is None:
             num = "null"
-        self.db.rooms.update({"name": room},
-                             {"$pull":
-                              {"reservations": {"id": id, "num": num}}})
+        self.db.rooms.update_one({"name": room},
+                                 {"$pull":
+                                 {"reservations": {"id": id, "num": num}}})
 
     def remove_event_from_here(self, room, id, here):
         '''
         Remove a lot of events.
         '''
-        self.db.rooms.update({"name": room},
-                             {"$pull":
-                              {"reservations":
-                               {"id": id, "num": {"$gte": here}}}})
+        self.db.rooms.update_one({"name": room},
+                                 {"$pull":
+                                  {"reservations":
+                                   {"id": id, "num": {"$gte": here}}}})
 
     def check_overlapping(self, room, id, start, start_hour, start_min,
                           end_hour, end_min, until, week_day=None):
