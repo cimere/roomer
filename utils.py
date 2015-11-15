@@ -5,6 +5,7 @@
 import time
 import string
 import datetime
+import logging
 
 
 def get_reservation_day(reservation):
@@ -114,4 +115,15 @@ def is_overlapping(request, rooms):
 
 def get_free_slot(duration):
     # print rooms.get_free_slots(duration)
+    # TO DO: to be implemented
     pass
+
+
+def logger(func):
+    ''' Decorator '''
+    def log_and_profile(*xargs):
+        # TO DO: implement profiler with time diff.
+        logging.info("Start executing: " + str(func))
+        func()
+        logging.info("Finish executing: " + str(func))
+    return log_and_profile
