@@ -31,7 +31,7 @@ class groupDAO:
         try:
             group = self.groups.find_one({"_id": ObjectId(group_id)})
         except:
-            print "Unable to query database for groups"
+            print("Unable to query database for groups")
         return group
 
     def get_all(self):
@@ -42,7 +42,7 @@ class groupDAO:
         try:
             cursor = self.groups.find()
         except:
-            print "Unable to query database for groups"
+            print("Unable to query database for groups")
         for doc in cursor:
             groups.append(doc)
         return groups
@@ -51,28 +51,28 @@ class groupDAO:
         """
         Add a new group to the collection.
         """
-        print "Not implemented yet."
+        print("Not implemented yet.")
 
     def remove(group_id):
         """
         Remove a group from the collection.
         """
-        print "Not implemented yet."
+        print("Not implemented yet.")
 
     def change_name(group_id, group_name):
         """
         Change the group name.
         """
-        print "Not implemented yet."
+        print("Not implemented yet.")
 
     def add_room(group_id, room_id):
         """
         Add a room to the group.
         """
-        print "Not implemented yet."
+        print("Not implemented yet.")
 
     def remove_room(group_id, room_id):
         """
         Remove a room from the group.
         """
-        print "Not implemented yet."
+        print("Not implemented yet.")

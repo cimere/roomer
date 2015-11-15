@@ -134,7 +134,7 @@ class BottleService(win32serviceutil.ServiceFramework):
             try:
                 self.bottle_srv = BottleWsgiServer(self.thread_event)
                 self.bottle_srv.start()
-            except Exception, info:
+            except Exception as info:
                 errmsg = getTrace()
                 servicemanager.LogErrorMsg(errmsg)
                 self.SvcStop()

@@ -111,7 +111,7 @@ def present_login():
 @app.get('/test')
 def present_test_login():
 
-    print 'sono qui'
+    print('sono qui')
     username = get_session_username()
 
     if username is None:
@@ -338,7 +338,7 @@ def is_overlapping():
             return True            
 
 def get_free_slot(duration):
-    print rooms.get_free_slots(duration)
+    print(rooms.get_free_slots(duration))
 
 if 'MONGOHQ_URL' in os.environ:
     connection_string = os.environ['MONGOHQ_URL']

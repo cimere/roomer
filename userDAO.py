@@ -33,7 +33,7 @@ class UserDAO:
         try:
             cursor = self.users.find()
         except:
-            print "Unable to query database for user"
+            print("Unable to query database for user")
         for doc in cursor:
             users['username'].append(doc['_id'])
         return users
@@ -45,7 +45,7 @@ class UserDAO:
         try:
             user = self.users.find_one({"_id": id})
         except:
-            print "Unable to query database for user"
+            print("Unable to query database for user")
         return user
 
     def validate_login(self, username):
@@ -56,8 +56,8 @@ class UserDAO:
         try:
             user = self.users.find_one({'_id': username})
         except:
-            print "Unable to query database for user"
+            print("Unable to query database for user")
         if user is None:
-            print "User not in database"
+            print("User not in database")
             return None
         return user

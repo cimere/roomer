@@ -37,7 +37,7 @@ LOG_PATH = os.path.join(APP_ROOT, LOG_DIR, LOG_FILE)
 
 # create file if it doesn't exist
 if not os.path.exists(LOG_PATH):
-    f = file(LOG_PATH, 'w')
+    f = open(LOG_PATH, 'w')
     f.close()
 logging.basicConfig(format='%(asctime)s %(message)s',
                     filename=LOG_PATH,
