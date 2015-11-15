@@ -167,7 +167,7 @@ def get_room(name):
     else:
         user_data = users.get_user(username)
         group_rooms = groups.get(user_data['groups'][0])['rooms']
-        if unicode(rooms.get_room_id(name)) in group_rooms:
+        if str(rooms.get_room_id(name)) in group_rooms:
             room_data = utils.format_room_data(rooms.get_room(name))
             rooms_names = rooms.get_rooms(group_rooms)
             return bottle.template('room', dict(user=user_data,
@@ -202,7 +202,7 @@ def get_events(name):
 
 @app.post('/insert_event')
 def insert():
-    items = bottle.request.forms.items()
+    items = list(bottle.request.forms.items())
     event = utils.to_dict(items)
     logging.info("Preparing to inserting event %s", event)
     # Compute data to manage recursive events
@@ -239,7 +239,7 @@ def insert():
 def update_event():
     ''' Only title update for recursive event
     datetime update for single events'''
-    items = bottle.request.forms.items()
+    items = list(bottle.request.forms.items())
     event = utils.to_dict(items)
     if event['scope'] == 'all':
         event['num'] = None
@@ -250,7 +250,7 @@ def update_event():
 @app.post('/remove_event')
 def remove_event():
 
-    items = bottle.request.forms.items()
+    items = list(bottle.request.forms.items())
     event = utils.to_dict(items)
     if event['scope'] == "onlyThis":
         logging.info("Removing only occurence number %s from event %s",
@@ -269,7 +269,7 @@ def get_session_username():
 if 'MONGOHQ_URL' in os.environ:
     connection_string = os.environ['MONGOHQ_URL']
     connection = pymongo.MongoClient(connection_string)
-    database = connection.get_default_database.im_func(connection)
+    database = connection.get_default_database.__func__(connection)
 else:
     connection_string = "mongodb://localhost"
     connection = pymongo.MongoClient(connection_string)
