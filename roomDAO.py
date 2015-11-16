@@ -1,6 +1,7 @@
 from bson import json_util
 import datetime
 import pymongo
+from utils import logger
 import json
 import sys
 # from bson.objectid import ObjectId
@@ -10,11 +11,13 @@ import sys
 # interactions with the User collection.
 class RoomDAO:
 
+    @logger
     def __init__(self, db):
         self.db = db
         self.rooms = self.db.rooms
         # self.SECRET = 'verysecret'
 
+    @logger
     def get_room_id(self, room_name):
         '''
         Given the room's name, return the room id.
@@ -26,6 +29,7 @@ class RoomDAO:
             print("Unable to query database for user", e)
         return None if room is None else room['_id']
 
+    @logger
     def get_room(self, name):
         '''
         Given the room's name, return the whole room document.
@@ -35,9 +39,10 @@ class RoomDAO:
                                        projection={'reservations': False})
         except:
             print("Unable to query database for user")
-        print("get_room returned %s bytes" % sys.getsizeof(room))
+        # print("get_room returned %s bytes" % sys.getsizeof(room))
         return room
 
+    @logger
     def get_rooms(self, rooms_list):
         '''
         Return all rooms details except reservations.
@@ -51,9 +56,10 @@ class RoomDAO:
                     rooms.append(doc)
         except:
             print("Unable to query database for user")
-        print("get_rooms returned %s bytes" % sys.getsizeof(rooms))
+        # print("get_rooms returned %s bytes" % sys.getsizeof(rooms))
         return rooms
 
+    @logger
     def get_events(self, room, start=None, end=None):
         '''
         Given a room name, return all its reservations.
@@ -92,9 +98,10 @@ class RoomDAO:
             events["reservations"].append(event)
         # TODO: move json dumps in web.py? If it returns an array do
         # I still need to perform json parse?
-        print("get_events returned %s bytes" % sys.getsizeof(events))
+        # print("get_events returned %s bytes" % sys.getsizeof(events))
         return json.dumps(events["reservations"], default=json_util.default)
 
+    @logger
     def insert_event(self, room, events):
         '''
         Insert an event in a room.
@@ -103,6 +110,7 @@ class RoomDAO:
                                  {"$push": {"reservations": {"$each": events}}})
         # return events["reservations"]
 
+    @logger
     def update_event(self, room, event):
         '''
         Update an event.
@@ -116,7 +124,7 @@ class RoomDAO:
                                     "max_num": {"$max": "$reservations.num"}}}
                         ]
             result = self.db.rooms.aggregate(pipeline)
-            max_num = list(result)['max_num']
+            max_num = result['max_num']
             for num in range(max_num):
                 query = {"name": room,
                          "reservations.id": event['id'],
@@ -134,6 +142,7 @@ class RoomDAO:
                      }
             self.db.rooms.update_one(query, event)
 
+    @logger
     def remove_event(self, room, id, num):
         '''
         Remove an event.
@@ -144,6 +153,7 @@ class RoomDAO:
                                  {"$pull":
                                  {"reservations": {"id": id, "num": num}}})
 
+    @logger
     def remove_event_from_here(self, room, id, here):
         '''
         Remove a lot of events.
@@ -153,6 +163,7 @@ class RoomDAO:
                                   {"reservations":
                                    {"id": id, "num": {"$gte": here}}}})
 
+    @logger
     def check_overlapping(self, room, id, start, start_hour, start_min,
                           end_hour, end_min, until, week_day=None):
         '''
@@ -199,6 +210,7 @@ class RoomDAO:
             print("Unable to query database for user")
         return list(results)
 
+    @logger
     def get_reservations_by_user(self, user):
         """
         Return all the reservations for a given user.

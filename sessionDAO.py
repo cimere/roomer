@@ -26,12 +26,14 @@ import string
 
 class SessionDAO:
 
+    @logger
     def __init__(self, database):
         self.db = database
         self.sessions = database.sessions
 
     # will start a new session id by adding a new document to the sessions
     # collection and returns the sessionID or None
+    @logger
     def start_session(self, username):
 
         session_id = self.get_random_str(32)
@@ -45,6 +47,7 @@ class SessionDAO:
         return str(session['_id'])
 
     # will send a new user session by deleting from sessions table
+    @logger
     def end_session(self, session_id):
 
         if session_id is None:
@@ -55,6 +58,7 @@ class SessionDAO:
         return
 
     # if there is a valid session, it is returned
+    @logger
     def get_session(self, session_id):
 
         if session_id is None:
@@ -66,6 +70,7 @@ class SessionDAO:
 
     # get the username of the current session, or None if the session is not
     # valid
+    @logger
     def get_username(self, session_id):
 
         session = self.get_session(session_id)
@@ -74,6 +79,7 @@ class SessionDAO:
         else:
             return session['username']
 
+    @logger
     def get_random_str(self, num_chars):
         random_string = ""
         for i in range(num_chars):

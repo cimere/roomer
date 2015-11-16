@@ -20,11 +20,13 @@
 # the User collection.
 class UserDAO:
 
+    @logger
     def __init__(self, db):
         self.db = db
         self.users = self.db.users
         # self.SECRET = 'verysecret'
 
+    @logger
     def get_user_ids(self):
         """
         Return all users ids.
@@ -38,6 +40,7 @@ class UserDAO:
             users['username'].append(doc['_id'])
         return users
 
+    @logger
     def get_user(self, id):
         """
         Given a user id, return the user document.
@@ -48,6 +51,7 @@ class UserDAO:
             print("Unable to query database for user")
         return user
 
+    @logger
     def validate_login(self, username):
         """
         Validate a user login. Return user record or None.

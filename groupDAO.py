@@ -20,10 +20,12 @@ from bson.objectid import ObjectId
 # the Groups collection.
 class groupDAO:
 
+    @logger
     def __init__(self, db):
         self.db = db
         self.groups = self.db.groups
 
+    @logger
     def get(self, group_id):
         '''
         Given a group id, return the corresponding document.
@@ -34,6 +36,7 @@ class groupDAO:
             print("Unable to query database for groups")
         return group
 
+    @logger
     def get_all(self):
         '''
         Return all the groups.
