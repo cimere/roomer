@@ -105,6 +105,42 @@ code {
     background-color: #3b8720;
     color: white;
 }
+.btn-405 {
+    margin: 1em;
+    background-color: #665FA2;
+    color: white;
+}
+.btn-405:hover {
+    background-color: #504b7f;
+    color: white;
+}
+.btn-406 {
+    margin: 1em;
+    background-color: #ED7835;
+    color: white;
+}
+.btn-406:hover {
+    background-color: #bf5e2a;
+    color: white;
+}
+.btn-379 {
+    margin: 1em;
+    background-color: #55B9A8;
+    color: white;
+}
+.btn-379:hover {
+    background-color: #55B9A8;
+    color: white;
+}
+.btn-381 {
+    margin: 1em;
+    background-color: #c4114d;
+    color: white;
+}
+.btn-381:hover {
+    background-color: #c4114d;
+    color: white;
+}
 /*	cursor: default; */
 .noClick:hover {
     cursor: default;
