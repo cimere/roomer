@@ -4,3 +4,5 @@ venv
 *.json
 *~
 *.org
+*.bak
+.ropeproject
