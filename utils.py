@@ -3,7 +3,6 @@
 #
 
 import time
-import string
 import datetime
 import logging
 
@@ -63,7 +62,8 @@ def to_dict(items):
     if 'num' in d.keys():
         d['num'] = int(d['num'])
     if 'allDay' in d.keys():
-        d['allDay'] = eval(string.capitalize(d['allDay']))
+        # d['allDay'] = eval(string.capitalize(d['allDay']))
+        d['allDay'] = eval(d['allDay'].capitalize())
     return d
 
 
@@ -121,9 +121,11 @@ def get_free_slot(duration):
 
 def logger(func):
     ''' Decorator '''
+    func_name = str(func).split()[1]
     def log_and_profile(*xargs):
         # TO DO: implement profiler with time diff.
-        logging.info("Start executing: " + str(func))
-        func()
-        logging.info("Finish executing: " + str(func))
+        logging.info("Start: " + func_name + " " + str(xargs))
+        ret = func(*xargs)
+        logging.info("End: " + func_name)
+        return ret
     return log_and_profile
