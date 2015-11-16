@@ -120,12 +120,16 @@ def get_free_slot(duration):
 
 
 def logger(func):
-    ''' Decorator '''
+    ''' Decorator for logging function's calls.
+    log format: function name|arguments|duration
+    '''
     func_name = str(func).split()[1]
+
     def log_and_profile(*xargs):
         # TO DO: implement profiler with time diff.
-        logging.info("Start: " + func_name + " " + str(xargs))
+        s_time = time.clock()
         ret = func(*xargs)
-        logging.info("End: " + func_name)
+        e_time = time.clock()
+        logging.info(func_name + "|" + str(xargs) + "|" + str(e_time - s_time))
         return ret
     return log_and_profile

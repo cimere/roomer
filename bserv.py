@@ -225,7 +225,7 @@ def insert():
 
     # Generate event(s)
     events = []
-    for count in range(n_events):
+    for count in range(int(n_events)):
         events.append(event.copy())
         event['start'] += datetime.timedelta(delta)
         event['end'] += datetime.timedelta(delta)
