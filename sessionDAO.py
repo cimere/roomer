@@ -19,6 +19,7 @@
 import sys
 import random
 import string
+from utils import logger
 
 
 # The session Data Access Object handles interactions with the sessions
