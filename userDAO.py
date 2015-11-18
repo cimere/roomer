@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 #
+from utils import logger
 
 
 # The User Data Access Object handles all interactions with
@@ -33,7 +34,7 @@ class UserDAO:
         """
         users = {'username': []}
         try:
-            cursor = self.users.find()
+            cursor = self.users.find({}, {"_id": 1})
         except:
             print("Unable to query database for user")
         for doc in cursor:
@@ -65,3 +66,13 @@ class UserDAO:
             print("User not in database")
             return None
         return user
+
+    @logger
+    def remove_user(self, id):
+        """
+        Remove a user from the users collection.
+        """
+        try:
+            self.users.remove({"_id": id})
+        except:
+            print("Unable to query database for user")
