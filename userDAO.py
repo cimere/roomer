@@ -32,13 +32,13 @@ class UserDAO:
         """
         Return all users ids.
         """
-        users = {'username': []}
+        users = []
         try:
             cursor = self.users.find({}, {"_id": 1})
         except:
             print("Unable to query database for user")
         for doc in cursor:
-            users['username'].append(doc['_id'])
+            users.append([doc['_id']])
         return users
 
     @logger

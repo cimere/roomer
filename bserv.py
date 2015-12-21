@@ -199,6 +199,19 @@ def get_events(name):
                             utils.epoch_to_iso(start),
                             utils.epoch_to_iso(end))
 
+@app.get('/users_list')
+def display_users():
+    # user_ids = users.get_user_ids()
+    # print(user_ids)
+    # username = bottle.request.forms.get("username")
+    # return bottle.template('users', users=user_ids, rooms=None)
+    return bottle.template('users', rooms=None)
+
+
+@app.get('/users')
+def get_users():
+    import json
+    return json.dumps({'data': users.get_user_ids()})
 
 @app.post('/insert_event')
 def insert():
