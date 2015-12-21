@@ -29,7 +29,6 @@ adding reservations info -->
   <script src=" https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
   <script>
     $(document).ready( function () {
-        console.log('ecco');
         $('#table_users').DataTable( {
             ajax: '/users',
             columns: [{ data: 0 }]
