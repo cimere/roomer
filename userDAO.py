@@ -18,6 +18,10 @@
 
 # The User Data Access Object handles all interactions with
 # the User collection.
+
+from utils import logger
+
+
 class UserDAO:
 
     @logger
