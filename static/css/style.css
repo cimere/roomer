@@ -17,7 +17,7 @@ border-radius: 5px;
 }
 
 #wrap > .container {
-  padding: 45px 15px 0;
+  /* padding: 45px 15px 0; */
 }
 .container .credit {
   margin: 20px 0;
@@ -78,30 +78,30 @@ code {
     color: white;
 }
 
-.btn-FUMAGALLI {
+.btn-357 {
     margin: 1em;
     background-color: #665FA2;
     color: white;
 }
-.btn-FUMAGALLI:hover {
+.btn-357:hover {
     background-color: #504b7f;
     color: white;
 }
-.btn-MARCONI {
+.btn-353 {
     margin: 1em;
     background-color: #ED7835;
     color: white;
 }
-.btn-MARCONI:hover {
+.btn-353:hover {
     background-color: #bf5e2a;
     color: white;
 }
-.btn-MEUCCI {
+.btn-351 {
     margin: 1em;
     background-color: #49A828;
     color: white;
 }
-.btn-MEUCCI:hover {
+.btn-351:hover {
     background-color: #3b8720;
     color: white;
 }
@@ -112,6 +112,7 @@ code {
 }
 .btn-405:hover {
     background-color: #504b7f;
+    E
     color: white;
 }
 .btn-406 {
@@ -123,12 +124,12 @@ code {
     background-color: #bf5e2a;
     color: white;
 }
-.btn-379 {
+.btn-377 {
     margin: 1em;
     background-color: #55B9A8;
     color: white;
 }
-.btn-379:hover {
+.btn-377:hover {
     background-color: #55B9A8;
     color: white;
 }
